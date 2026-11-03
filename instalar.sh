@@ -64,7 +64,7 @@ if ! sudo -v; then
   exit 1
 fi
 # Mantém o sudo ativo enquanto o script roda.
-( while kill -0 $$ 2>/dev/null; do sudo -n true 2>/dev/null; sleep 50; done ) &
+( while kill -0 $$ 2>/dev/null; do sudo -n -v 2>/dev/null; sleep 50; done ) &
 SUDO_PID=$!
 trap 'kill $SUDO_PID 2>/dev/null' EXIT
 
@@ -97,6 +97,21 @@ garantir_componentes() {
   fi
 }
 MODULO_ATUAL=00-preparo passo "Ativar repositórios universe/restricted/multiverse" garantir_componentes
+
+# A imagem do Xubuntu vem com uma fonte de pacotes "file:/cdrom" (o pendrive).
+# Sem o pendrive conectado ela faz o "apt update" falhar, então é desativada.
+# (O driver de Wi-Fi offline lê os .deb do pendrive direto, sem precisar dela.)
+desativar_cdrom() {
+  local f=/etc/apt/sources.list.d/cdrom.sources
+  if [[ -f "$f" ]] && ! grep -q '^Enabled: no' "$f"; then
+    sudo sed -i '1i Enabled: no' "$f"
+  fi
+  if [[ -f /etc/apt/sources.list ]]; then
+    sudo sed -i 's|^deb cdrom:|# deb cdrom:|' /etc/apt/sources.list
+  fi
+  return 0
+}
+MODULO_ATUAL=00-preparo passo "Desativar a fonte de pacotes do pendrive (cdrom)" desativar_cdrom
 if [[ "$ONLINE" == 1 ]]; then
   MODULO_ATUAL=00-preparo passo "Atualizar lista de pacotes" apt_atualizar
 fi

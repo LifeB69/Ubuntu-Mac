@@ -1,0 +1,12 @@
+#!/bin/sh
+# Ubuntu-Mac — zoom pela pinça do touchpad (chamado pelo libinput-gestures).
+# Programas que já fazem zoom suave sozinhos com a pinça ficam de fora,
+# para não dar zoom em dobro. Os outros recebem Ctrl+= / Ctrl+-.
+classe=$(xdotool getactivewindow getwindowclassname 2>/dev/null | tr '[:upper:]' '[:lower:]')
+case "$classe" in
+  firefox*|navigator*) exit 0 ;;
+esac
+case "$1" in
+  in)  xdotool key --clearmodifiers ctrl+equal ;;
+  out) xdotool key --clearmodifiers ctrl+minus ;;
+esac

@@ -5,6 +5,9 @@
 #
 # Baixa este repositório para ~/Ubuntu-Mac (com git, para o Claude local poder
 # salvar melhorias depois) e roda o instalar.sh.
+#
+# Depois da primeira vez, basta digitar:  ubuntu-mac
+# (aceita as mesmas opções do instalar.sh, ex.: ubuntu-mac --somente 05)
 
 set -u
 REPO_URL="https://github.com/LifeB69/Ubuntu-Mac"
@@ -19,7 +22,19 @@ if ! command -v git >/dev/null; then
     echo "Não consegui instalar o git; vou baixar como arquivo compactado."
 fi
 
-if [[ -d "$DEST/.git" ]]; then
+# Rodando de uma pasta já baixada (ZIP do GitHub ou pendrive)? Usa ela.
+AQUI=""
+if [[ -f "${BASH_SOURCE[0]:-}" ]]; then
+  AQUI="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+  [[ -f "$AQUI/instalar.sh" ]] || AQUI=""
+fi
+
+if [[ -n "$AQUI" && "$AQUI" == "$DEST" ]]; then
+  [[ -d "$DEST/.git" ]] && { git -C "$DEST" pull --ff-only 2>/dev/null || echo "(sem atualização do GitHub; usando a versão local)"; }
+elif [[ -n "$AQUI" ]]; then
+  echo "Copiando $AQUI para $DEST"
+  mkdir -p "$DEST" && cp -a "$AQUI/." "$DEST/" || { echo "Falha ao copiar para $DEST"; exit 1; }
+elif [[ -d "$DEST/.git" ]]; then
   git -C "$DEST" pull --ff-only || echo "Aviso: não consegui atualizar; usando a versão que já está aqui."
 elif command -v git >/dev/null && git clone -b "$RAMO" "$REPO_URL" "$DEST"; then
   :
@@ -31,5 +46,11 @@ else
     }
 fi
 
-chmod +x "$DEST/instalar.sh"
+chmod +x "$DEST/instalar.sh" "$DEST/comecar.sh"
+
+# Cria o comando curto "ubuntu-mac" para as próximas vezes (atualiza e roda de novo).
+if [[ ! -e /usr/local/bin/ubuntu-mac ]]; then
+  sudo ln -sf "$DEST/comecar.sh" /usr/local/bin/ubuntu-mac ||
+    echo "Aviso: não consegui criar o comando ubuntu-mac (use $DEST/comecar.sh)."
+fi
 exec "$DEST/instalar.sh" "$@" </dev/tty

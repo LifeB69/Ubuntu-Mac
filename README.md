@@ -15,7 +15,7 @@ Você instala o sistema, roda **um comando**, reinicia e está pronto.
 
 1. **Faça backup de tudo.** A instalação **apaga o disco inteiro**.
    (Se um dia quiser o macOS de volta: ligue segurando **⌥ ⌘ R** para a *Recuperação pela Internet*.)
-2. **Baixe o Xubuntu 26.04.1** (arquivo de ~4 GB):
+2. **Baixe o Xubuntu 26.04.1** (arquivo de ~5 GB):
    https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso
 3. **Confira o arquivo.** No Terminal do macOS:
    ```bash
@@ -47,11 +47,22 @@ Você instala o sistema, roda **um comando**, reinicia e está pronto.
 
 ## Passo 3 — O comando único
 
-Já no Xubuntu, com internet (Wi-Fi ou celular), abra o Terminal (**Ctrl+Alt+T**) e cole:
+Já no Xubuntu, com internet (Wi-Fi ou celular), abra o Terminal (**Ctrl+Alt+T**).
+
+**Se o repositório for público**, cole:
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash
 ```
+
+**Se o repositório for privado:** abra o Firefox, entre no GitHub, vá em
+`github.com/LifeB69/Ubuntu-Mac` → **Code → Download ZIP** e depois rode:
+
+```bash
+cd ~/Downloads && unzip -q Ubuntu-Mac-main.zip && Ubuntu-Mac-main/comecar.sh
+```
+
+**Nas próximas vezes** é só digitar `ubuntu-mac`. Ele atualiza os scripts e roda tudo de novo (aceita as mesmas opções, ex.: `ubuntu-mac --somente 05`).
 
 Ele pede sua senha **uma vez** e faz tudo sozinho (leva de 15 a 40 minutos, dependendo da internet).
 **Se algo falhar, ele não para:** anota a falha, continua o resto e mostra um resumo no final. Depois:
@@ -59,8 +70,6 @@ Ele pede sua senha **uma vez** e faz tudo sozinho (leva de 15 a 40 minutos, depe
 ```bash
 sudo reboot
 ```
-
-> Se o repositório estiver **privado**, o comando acima não consegue baixar. Deixe-o público ou copie a pasta para o Mac e rode `./instalar.sh` de dentro dela.
 
 ## Passo 4 — Claude
 
@@ -80,9 +89,9 @@ sudo reboot
 | `03-memoria` | **zram** (swap comprimido em RAM, ~60%) e **earlyoom** (evita que o sistema congele sem memória) |
 | `04-energia` | **TLP** (bateria), **thermald** (temperatura) e **mbpfan** (ventoinha do MacBook) |
 | `05-teclado` | Layout US com acentos no Option direito e **⌘ funcionando como no Mac** (keyd) |
-| `06-touchpad` | Rolagem natural, toque para clicar e clique com dois dedos = botão direito |
+| `06-touchpad` | Rolagem natural, toque para clicar, botão direito com dois dedos, **gestos de 3 e 4 dedos e pinça para zoom** |
 | `07-ajustes-mac` | TRIM do SSD, microcódigo Intel e internet do iPhone/Android via cabo |
-| `08-programas` | Firefox `.deb` em português (abre bem mais rápido que o Snap), fontes, tema Arc, ícones Papirus e dock Plank |
+| `08-programas` | Firefox `.deb` em português (abre bem mais rápido que o Snap), **Google Chrome** (para o Claude in Chrome), fontes, tema Arc, ícones Papirus e dock Plank |
 | `09-claude` | **Claude Desktop** (repositório oficial da Anthropic) e **Claude Code** (`claude` no terminal) |
 | `10-interface` | Dock embaixo, botões das janelas à esquerda, fontes e atalhos |
 
@@ -97,7 +106,7 @@ As opções ficam em [`config.conf`](config.conf) (layout do teclado, ⌘ como C
 | ⌘Tab | trocar de janela |
 | ⌘ (tocar sozinho) ou ⌘Espaço | menu e busca de aplicativos |
 | ⌘← / ⌘→ | início / fim da linha |
-| ⌘⇧4 | capturar uma área da tela |
+| ⌘⇧3 / ⌘⇧4 | capturar a tela inteira / uma área |
 | Ctrl+Alt+T | abrir o terminal |
 | No terminal: ⌘⇧C / ⌘⇧V | copiar / colar |
 | No terminal: **Ctrl**+C (Ctrl de verdade) | interromper o programa |
@@ -107,6 +116,28 @@ As opções ficam em [`config.conf`](config.conf) (layout do teclado, ⌘ como C
 | Option direito + `` ` ``, depois `a` | à |
 | Option direito + `,` | ç |
 | fn + F1…F12 | F1…F12 (sem fn: brilho, volume, mídia) |
+
+### Touchpad
+
+| Gesto | Faz |
+|---|---|
+| tocar com 1 dedo | clique |
+| tocar ou clicar com 2 dedos | botão direito |
+| tocar com 3 dedos | botão do meio (colar seleção, abrir link em nova aba) |
+| arrastar com 2 dedos | rolar (rolagem natural, igual ao Mac) |
+| tocar duas vezes e arrastar | arrastar janelas e arquivos |
+| pinça (abrir/fechar 2 dedos) | zoom (no Firefox é suave; nos outros apps vai em passos, como ⌘+ e ⌘−) |
+| 3 dedos ← → | trocar de área de trabalho |
+| 3 dedos ↑ | ver todas as janelas (parecido com o Mission Control) |
+| 3 dedos ↓ | mostrar a área de trabalho |
+| 4 dedos ← → | voltar / avançar no navegador |
+
+O que **não** dá para ter igual ao macOS: o "arrastar com 3 dedos" e as animações que acompanham os dedos em tempo real. No XFCE os gestos disparam a ação quando você termina o movimento.
+
+### O Claude usando o navegador
+
+A extensão **Claude in Chrome** (o Claude abrindo páginas, clicando e preenchendo coisas) só funciona no **Google Chrome** e em navegadores parecidos (Edge, Brave). **No Firefox não existe** versão oficial. Por isso o script instala o Chrome também. O Firefox continua sendo o navegador do dia a dia, e o Chrome só gasta memória quando está aberto.
+Para ativar: abra o Chrome, instale a extensão Claude pela Chrome Web Store e entre com a mesma conta do Claude Code. O "Computer Use" (o Claude controlando o computador inteiro) ainda **não** existe no Linux.
 
 ## Rodar de novo, rodar só uma parte, logs
 

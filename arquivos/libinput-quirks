@@ -1,0 +1,7 @@
+# Gerado pelo Ubuntu-Mac — o teclado virtual do keyd conta como teclado interno,
+# para o touchpad continuar ignorando a palma da mão enquanto você digita.
+# (recomendação da documentação do keyd)
+[keyd virtual keyboard]
+MatchUdevType=keyboard
+MatchName=keyd virtual keyboard
+AttrKeyboardIntegration=internal

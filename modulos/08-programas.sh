@@ -12,14 +12,11 @@ fi
 # O Snap demora bastante para abrir em máquinas antigas. A Mozilla mantém um
 # repositório apt oficial. Só removemos o Snap DEPOIS que o .deb instalar,
 # para você nunca ficar sem navegador.
-if [[ "$FIREFOX_DEB" != 1 ]]; then
-  pular "Firefox .deb" "desligado no config.conf"
-  return 0
-fi
-
 firefox_deb_ok() { dpkg-query -W -f='${Version}' firefox 2>/dev/null | grep -qv snap; }
 
-if firefox_deb_ok; then
+if [[ "$FIREFOX_DEB" != 1 ]]; then
+  pular "Firefox .deb" "desligado no config.conf"
+elif firefox_deb_ok; then
   pular "Firefox .deb" "já instalado"
 else
   adicionar_repo_mozilla() {
@@ -33,6 +30,9 @@ else
     # Prioridade 1000: prefere o Firefox da Mozilla ao pacote de transição (Snap) do Ubuntu.
     printf 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000\n' |
       sudo tee /etc/apt/preferences.d/mozilla >/dev/null
+    # Atualizações automáticas de segurança também para o Firefox da Mozilla.
+    printf 'Unattended-Upgrade::Origins-Pattern { "origin=packages.mozilla.org"; };\n' |
+      sudo tee /etc/apt/apt.conf.d/51ubuntu-mac-firefox >/dev/null
     apt_atualizar
   }
   if passo "Adicionar repositório oficial da Mozilla" adicionar_repo_mozilla &&
@@ -44,4 +44,26 @@ else
   else
     aviso "Firefox .deb não instalou; o Firefox Snap continua funcionando normalmente."
   fi
+fi
+
+# ---------- Google Chrome (para o Claude in Chrome) ----------
+# A extensão Claude in Chrome (o Claude controlando o navegador) só existe para
+# Chrome e navegadores Chromium. O Firefox continua sendo o navegador principal;
+# o Chrome só gasta memória quando está aberto.
+if [[ "$INSTALAR_CHROME" != 1 ]]; then
+  pular "Google Chrome" "desligado no config.conf"
+elif pacote_instalado google-chrome-stable; then
+  pular "Google Chrome" "já instalado (atualiza junto com o sistema)"
+else
+  instalar_chrome() {
+    local deb; deb="$(mktemp --suffix=.deb)"
+    tentar 3 wget -qO "$deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&
+      sudo chmod 644 "$deb" &&
+      tentar 2 sudo apt-get "${APT_OPTS[@]}" install "$deb"
+    local rc=$?
+    rm -f "$deb"
+    return "$rc"
+  }
+  # O pacote do Chrome cadastra sozinho o repositório do Google para atualizações.
+  passo "Instalar Google Chrome" instalar_chrome
 fi

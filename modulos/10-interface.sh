@@ -47,6 +47,8 @@ passo "Botões das janelas à esquerda (fechar, minimizar, maximizar)" \
   xfset xfwm4 /general/button_layout string "CHM|"
 passo "Título das janelas centralizado" xfset xfwm4 /general/title_alignment string center
 passo "Sem sombra embaixo da dock" xfset xfwm4 /general/show_dock_shadow bool false
+# O Xubuntu vem com 1 só área de trabalho; os gestos de 3 dedos ← → precisam de mais.
+passo "4 áreas de trabalho (para os gestos de 3 dedos)" xfset xfwm4 /general/workspace_count int 4
 
 # ---------- Atalhos ----------
 # ⌘ sozinho manda "Super"; ⌘+Espaço manda "Super+Espaço" (ver arquivos/keyd-mac.conf).
@@ -58,7 +60,9 @@ if command -v xfce4-popup-whiskermenu >/dev/null; then
 fi
 passo "Atalho: Ctrl+Alt+T abre o terminal" \
   xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Alt>t" string "xfce4-terminal"
-passo "Atalho: ⌘+Shift+4 captura de área da tela" \
+passo "Atalho: ⌘+Shift+3 captura a tela inteira" \
+  xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Shift>numbersign" string "xfce4-screenshooter -f"
+passo "Atalho: ⌘+Shift+4 captura uma área da tela" \
   xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Shift>dollar" string "xfce4-screenshooter -r"
 
 # ---------- Dock (Plank) ----------

@@ -137,6 +137,6 @@ carregar_config() {
   [[ -f "$REPO/config.conf" ]] && source "$REPO/config.conf"
   : "${TECLADO_LAYOUT:=us}" "${TECLADO_VARIANTE:=altgr-intl}"
   : "${CMD_COMO_CTRL:=1}" "${ZRAM_PORCENTAGEM:=60}"
-  : "${FIREFOX_DEB:=1}" "${INSTALAR_CLAUDE_DESKTOP:=1}" "${INSTALAR_CLAUDE_CODE:=1}"
+  : "${FIREFOX_DEB:=1}" "${INSTALAR_CHROME:=1}" "${INSTALAR_CLAUDE_DESKTOP:=1}" "${INSTALAR_CLAUDE_CODE:=1}"
   : "${INSTALAR_COWORK:=0}" "${TEMA_MAC:=1}" "${FUSO_HORARIO:=America/Sao_Paulo}"
 }

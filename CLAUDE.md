@@ -5,7 +5,7 @@ Você está rodando **dentro** do notebook que este repositório configura. Fale
 ## Contexto
 
 - **Máquina:** MacBook Air 7,1 (11", Early 2015). Intel Core i5-5250U (Broadwell, Intel HD 6000), **4 GB de RAM**, SSD PCIe, Wi-Fi Broadcom BCM4360 (`14e4:43a0`), webcam FaceTime HD (Broadcom 1570, PCIe), teclado US com retroiluminação.
-- **Sistema:** Xubuntu 26.04 LTS (XFCE sobre X11, kernel 7.0), substituindo o macOS por completo.
+- **Sistema:** Xubuntu 26.04 LTS (XFCE sobre X11, kernel 7.0), substituindo o macOS por completo. Atenção: o `sudo` do 26.04 é o **sudo-rs** (reimplementação em Rust); algumas opções do sudo clássico (ex.: `verifypw`) não existem nele.
 - **Objetivo do usuário:** um notebook leve e estável para usar Claude Desktop e Claude Code no dia a dia.
 - **O que já foi feito:** o `instalar.sh` rodou os módulos de `modulos/` (veja o `README.md`, seção "O que é configurado"). As opções estão em `config.conf`.
 
@@ -35,7 +35,8 @@ Confira cada item. Alguns precisam do usuário (apertar teclas, fechar a tampa);
 | Teclado ⌘ | ⌘C/⌘V num editor, ⌘Tab, ⌘ sozinho abre o menu, ⌘Espaço | `sudo keyd monitor` mostra as teclas; ajuste `arquivos/keyd-mac.conf`. **Confirme** que ⌘Espaço envia só `Super+Espaço` (sem Ctrl) |
 | Acentos | Option direito + `'` + `a` = á; Option direito + `,` = ç | `setxkbmap -query`; `/etc/default/keyboard` |
 | Teclas de função | brilho, volume, luz do teclado (F5/F6) | `hid_apple fnmode`; `ls /sys/class/leds` (`smc::kbd_backlight`) |
-| Touchpad | rolagem natural, toque = clique, 2 dedos = botão direito | `xinput list-props`; `arquivos/touchpad.conf` |
+| Touchpad | rolagem natural, toque = clique, 2 dedos = botão direito, palma ignorada ao digitar | `xinput list-props`; `arquivos/touchpad.conf`; `arquivos/libinput-quirks` (necessário por causa do keyd) |
+| Gestos | 3 dedos ← → (área de trabalho), ↑ (xfdashboard), ↓ (mostrar mesa), 4 dedos ← → (voltar/avançar), pinça (zoom) | `libinput-gestures-setup status`; `libinput debug-events` (usuário precisa estar no grupo `input`, vale após novo login). Confira se a pinça no **Firefox** dá zoom suave sozinha (MOZ_USE_XINPUT2=1 em /etc/environment). Se não der, tire `firefox` da exceção em `arquivos/ubuntu-mac-zoom`. Se der zoom em dobro em outro app, adicione-o à exceção |
 | Suspensão | fechar a tampa, esperar 30 s, abrir. Também `systemctl suspend` | **Problema conhecido em MacBooks:** acorda sozinho logo depois de suspender. Veja `cat /proc/acpi/wakeup`; geralmente se resolve desativando `XHC1` (e às vezes `LID0`) com um serviço systemd que roda `echo XHC1 > /proc/acpi/wakeup` no boot (só se estiver `*enabled`). Crie como módulo novo |
 | Áudio | alto-falantes, fone, microfone | `wpctl status`, `pavucontrol` |
 | Ventoinha/temperatura | `sensors`; carga com `stress` ou compilação | ajustar `arquivos/mbpfan.conf` |
@@ -44,6 +45,7 @@ Confira cada item. Alguns precisam do usuário (apertar teclas, fechar a tampa);
 | Webcam | `lspci -nn \| grep -i 14e4:1570` | ver Tarefa 3 |
 | Bluetooth | parear um dispositivo | `bluetoothctl`, `rfkill` |
 | Claude Desktop | abrir, fazer login, fechar e abrir de novo (login salvo?) | keyring: ver a doc oficial https://code.claude.com/docs/en/desktop-linux |
+| Claude in Chrome | Chrome aberto com a extensão Claude logada na mesma conta; no Claude Code, `/chrome` | doc oficial: https://code.claude.com/docs/en/chrome |
 
 ## Tarefa 3: webcam FaceTime HD (ficou de fora de propósito)
 
