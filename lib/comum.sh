@@ -85,7 +85,12 @@ ativar_servico() { # ativar_servico nome.service
   sudo systemctl restart --no-block "$1" || return 1
   local i
   for ((i = 0; i < 30; i++)); do
-    systemctl is-active --quiet "$1" && { echo "$1: ativo"; return 0; }
+    # Confere de novo depois de 3 s: um serviço que cai e reinicia em loop
+    # pode aparecer "ativo" por um instante.
+    if systemctl is-active --quiet "$1"; then
+      sleep 3
+      systemctl is-active --quiet "$1" && { echo "$1: ativo"; return 0; }
+    fi
     if systemctl is-failed --quiet "$1"; then
       systemctl status "$1" --no-pager -l 2>&1 | tail -20
       return 1
