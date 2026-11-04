@@ -124,7 +124,7 @@ Clique em **Reiniciar agora**. Quando pedir, **tire o pendrive** e aperte Enter.
    - Se aparecerem **redes Wi-Fi**, conecte na de casa. É melhor que os dados do celular.
    - Se não aparecer nenhuma, continue com o **celular no cabo**. O script instala o Wi-Fi.
 
-> Nos primeiros minutos o Ubuntu baixa atualizações sozinho, em segundo plano. Tudo bem: o script espera.
+> **Espere uns 5 minutos depois do primeiro login antes do próximo passo.** Nesse tempo o Ubuntu termina a preparação inicial e baixa atualizações em segundo plano. Se você rodar antes, não tem problema: o script espera. Só demora mais.
 
 ### C2. Abrir o Terminal
 Aperte **Ctrl+Alt+T** (ou Menu → Terminal).
