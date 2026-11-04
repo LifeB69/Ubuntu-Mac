@@ -143,6 +143,23 @@ esperar_dpkg() {
   return 1
 }
 
+# Espera o snapd terminar a "preparação inicial" (seeding) do primeiro boot.
+# Antes disso, qualquer operação com snaps falha ("device not yet seeded").
+# Espera no máximo uma vez por execução (até 10 min).
+esperar_snapd() {
+  command -v snap >/dev/null || return 0
+  local marca="$LOG_DIR/.snapd-esperado"
+  if [[ -f "$marca" ]]; then
+    cut -d' ' -f2- "$marca"
+    [[ "$(head -c1 "$marca")" == 0 ]]
+    return
+  fi
+  if sudo timeout 600 snap wait system seed.loaded; then
+    echo "0 snapd pronto" >"$marca"; return 0
+  fi
+  echo "1 snapd não terminou a preparação em 10 min" >"$marca"; return 1
+}
+
 # O usuário pediu explicitamente este módulo (--somente NN)?
 # Usado para reaplicar coisas que normalmente só são aplicadas uma vez.
 modulo_pedido() { [[ " ${UBUNTU_MAC_SOMENTE:-} " == *" $1 "* ]]; }

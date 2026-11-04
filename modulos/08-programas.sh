@@ -54,9 +54,12 @@ else
     passo "Firefox como navegador padrão" navegador_padrao_firefox
     if snap list firefox >/dev/null 2>&1; then
       # Logo após a instalação o snapd ainda está "semeando" os snaps iniciais
-      # e recusa remoções ("seed change in progress"). Espera terminar (até 15 min).
-      passo "Esperar o snapd terminar a preparação inicial" sudo timeout 900 snap wait system seed.loaded
-      passo "Remover Firefox Snap antigo" sudo timeout 600 snap remove --purge firefox
+      # e recusa remoções ("seed change in progress"). Espera terminar (até 10 min).
+      if passo "Esperar o snapd terminar a preparação inicial" esperar_snapd; then
+        passo "Remover Firefox Snap antigo" sudo timeout 600 snap remove --purge firefox
+      else
+        aviso "Firefox Snap antigo não removido (snapd ainda ocupado). Rode 'ubuntu-mac --somente 08' mais tarde."
+      fi
     fi
   else
     aviso "Firefox .deb não instalou; o Firefox Snap continua funcionando normalmente."

@@ -6,8 +6,33 @@ if [[ "$ONLINE" != 1 ]]; then
   return 0
 fi
 
-passo "Atualizar todos os pacotes (pode demorar)" \
+# O pacote "firefox" do Ubuntu é só uma ponte para o Snap: atualizá-lo antes de o
+# snapd terminar a preparação inicial do primeiro boot FALHA e deixa o dpkg quebrado.
+# Como ele vai ser trocado pelo Firefox .deb da Mozilla (módulo 08), fica de fora.
+firefox_eh_ponte_snap() { dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem snap; }
+
+atualizar_sistema() {
+  local segurar=() rc
+  if firefox_eh_ponte_snap; then
+    if [[ "$FIREFOX_DEB" == 1 ]]; then
+      segurar=(firefox)
+    else
+      esperar_snapd || echo "Seguindo mesmo assim."
+    fi
+  fi
+  ((${#segurar[@]})) && sudo apt-mark hold "${segurar[@]}"
   tentar 2 sudo apt-get "${APT_OPTS[@]}" full-upgrade
+  rc=$?
+  ((${#segurar[@]})) && sudo apt-mark unhold "${segurar[@]}"
+  if ((rc != 0)); then
+    # Nunca deixa o sistema de pacotes "pela metade" para os próximos passos.
+    echo "Atualização falhou; consertando o dpkg para os próximos passos..."
+    sudo dpkg --configure -a
+    sudo apt-get "${APT_OPTS[@]}" -f install
+  fi
+  return "$rc"
+}
+passo "Atualizar todos os pacotes (pode demorar)" atualizar_sistema
 
 instalar_lista "ferramentas básicas" \
   curl wget git gnupg ca-certificates dconf-cli xdotool \
