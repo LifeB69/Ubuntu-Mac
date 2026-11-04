@@ -150,6 +150,7 @@ cd ~/Downloads && unzip -oq Ubuntu-Mac-*.zip && bash Ubuntu-Mac-*/comecar.sh
 - Cada passo aparece com **OK**, **FALHOU** ou **pulado**, e os passos longos mostram o tempo decorrido. A primeira parte, "Atualizar todos os pacotes", pode levar de 10 a 20 minutos.
 - **Se algo falhar, ele não para:** anota o erro e segue.
 - **Deixe a tampa aberta e o carregador ligado.** Leva de 20 a 40 minutos.
+- Se a tela **apagar ou bloquear** no meio, é só o protetor de tela: mexa no touchpad e digite a senha. A instalação continua por trás, e o notebook não entra em suspensão enquanto ela roda.
 
 ### C5. Final
 Aparece um **resumo** (OK, falhas, pulados) e a pergunta **"Reiniciar agora? [s/N]"**: digite `s` e Enter.
