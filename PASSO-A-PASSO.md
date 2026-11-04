@@ -2,6 +2,7 @@
 
 Guia completo para trocar o macOS pelo **Xubuntu 26.04** já configurado, com Claude Desktop e Claude Code.
 **Abra este guia no celular**, porque o Mac vai ser apagado no meio do caminho.
+Há também uma **versão visual**, com etapas marcáveis e botões para copiar os comandos: [MANUAL.html](MANUAL.html).
 
 **Tempo total:** cerca de 2 horas, quase todo esperando barra de progresso.
 

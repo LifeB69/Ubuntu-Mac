@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ubuntu no MacBook Air</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: manual de campo em uma coluna de leitura; barra fixa com as partes A–F e o progresso;
+   cada etapa é um bloco marcável; comandos em "terminal" com botão de copiar. */
+:root {
+  --bg: #edf0f3;          /* alumínio */
+  --panel: #ffffff;
+  --ink: #17202b;
+  --muted: #586374;
+  --line: #d3d9e1;
+  --accent: #2c54c2;
+  --accent-soft: #e2e8f8;
+  --warn: #8a5300;
+  --warn-soft: #fbefd9;
+  --ok: #1b7548;
+  --ok-soft: #dff3e8;
+  --term-bg: #141a21;
+  --term-fg: #dce3ec;
+  --term-dim: #8c99a9;
+  --term-prompt: #7fd1a8;
+  --key-bg: #fbfcfd;
+  --key-edge: #b4bdc9;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1318; --panel: #171c23; --ink: #e3e8ef; --muted: #9aa5b4; --line: #2a323d;
+    --accent: #8ea6ff; --accent-soft: #1d2640; --warn: #f0b357; --warn-soft: #2d2414;
+    --ok: #5ccb92; --ok-soft: #14291f; --term-bg: #0a0d11; --term-fg: #dce3ec; --term-dim: #7d8a9a;
+    --term-prompt: #7fd1a8; --key-bg: #222934; --key-edge: #3a4452; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1318; --panel: #171c23; --ink: #e3e8ef; --muted: #9aa5b4; --line: #2a323d;
+  --accent: #8ea6ff; --accent-soft: #1d2640; --warn: #f0b357; --warn-soft: #2d2414;
+  --ok: #5ccb92; --ok-soft: #14291f; --term-bg: #0a0d11; --term-fg: #dce3ec; --term-dim: #7d8a9a;
+  --term-prompt: #7fd1a8; --key-bg: #222934; --key-edge: #3a4452; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.6 var(--f-body);
+  -webkit-text-size-adjust: 100%;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--panel);
+}
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+}
+.wrap {
+  max-width: 780px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Abertura ---------- */
+.capa { padding-block: 40px 28px; display: grid; gap: 18px; }
+.olho { font: 600 13px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 {
+  font: 700 clamp(36px, 8vw, 58px)/1.02 var(--f-display); letter-spacing: -.01em;
+  margin: 0; text-wrap: balance;
+}
+.capa p.lead { margin: 0; font-size: 18px; color: var(--muted); max-width: 60ch; }
+.ficha {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
+}
+.ficha div { background: var(--panel); padding: 12px 14px; min-width: 0; }
+.ficha dt { font: 500 11px/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ficha dd { margin: 4px 0 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.precisa { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.precisa li { display: flex; gap: 10px; align-items: baseline; }
+.precisa li::before { content: "▸"; color: var(--accent); font-size: 12px; flex: none; }
+.aviso {
+  border-left: 3px solid var(--warn); background: var(--warn-soft); color: var(--ink);
+  padding: 12px 14px; border-radius: 0 var(--r) var(--r) 0;
+}
+.aviso strong { color: var(--warn); }
+
+/* ---------- Barra fixa ---------- */
+.barra {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--panel); border-bottom: 1px solid var(--line);
+}
+.barra .wrap { display: flex; align-items: center; gap: 12px; padding-block: 8px; }
+.partes { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.partes::-webkit-scrollbar { display: none; }
+.partes a {
+  flex: none; text-decoration: none; color: var(--ink); font: 600 14px/1 var(--f-display);
+  padding: 8px 8px; border-radius: 6px; white-space: nowrap;
+}
+.partes a span { font-family: var(--f-mono); color: var(--accent); margin-right: 4px; }
+.partes a:hover { background: var(--accent-soft); }
+.progresso { flex: none; display: flex; align-items: center; gap: 8px; font: 500 13px/1 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.progresso .trilho { width: 64px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.progresso .cheio { height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+
+/* ---------- Partes e etapas ---------- */
+main { padding-block: 8px 40px; }
+.parte { padding-top: 36px; scroll-margin-top: 64px; }
+.parte > header { display: grid; gap: 4px; margin-bottom: 14px; }
+.parte .letra { font: 600 13px/1 var(--f-mono); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+h2 { font: 700 30px/1.1 var(--f-display); margin: 0; text-wrap: balance; }
+.parte > header p { margin: 4px 0 0; color: var(--muted); }
+
+.etapa {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 16px 18px 18px; margin-top: 12px; display: grid; gap: 12px; scroll-margin-top: 64px;
+  transition: border-color .2s;
+}
+.etapa.feita { border-color: var(--ok); }
+.etapa > header { display: flex; align-items: flex-start; gap: 12px; }
+.codigo {
+  flex: none; font: 600 13px/1 var(--f-mono); color: var(--accent); background: var(--accent-soft);
+  padding: 6px 7px; border-radius: 6px; margin-top: 2px;
+}
+.etapa.feita .codigo { color: var(--ok); background: var(--ok-soft); }
+h3 { font: 600 20px/1.25 var(--f-display); margin: 0; flex: 1; min-width: 0; text-wrap: balance; }
+.feito {
+  flex: none; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+  font: 500 13px/1 var(--f-mono); color: var(--muted); padding: 4px 0;
+}
+.feito input { width: 20px; height: 20px; accent-color: var(--ok); margin: 0; cursor: pointer; }
+.etapa.feita .feito { color: var(--ok); }
+.etapa p, .etapa ol, .etapa ul { margin: 0; }
+.etapa ol, .etapa ul { padding-left: 22px; display: grid; gap: 6px; }
+.etapa > *:not(header) { min-width: 0; }
+.nota { font-size: 15px; color: var(--muted); }
+.dica {
+  font-size: 15px; background: var(--accent-soft); border-radius: 8px; padding: 10px 12px;
+}
+.dica strong { color: var(--accent); }
+
+/* ---------- Terminal ---------- */
+.cmd { background: var(--term-bg); border-radius: 8px; overflow: hidden; }
+.cmd .topo {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 8px 6px 12px; border-bottom: 1px solid #ffffff14;
+}
+.cmd .onde { font: 500 12px/1 var(--f-mono); color: var(--term-dim); letter-spacing: .04em; }
+.cmd button {
+  font: 500 12px/1 var(--f-mono); color: var(--term-fg); background: #ffffff14; border: 0;
+  padding: 7px 10px; border-radius: 5px; cursor: pointer;
+}
+.cmd button:hover { background: #ffffff26; }
+.cmd button.ok { color: var(--term-prompt); }
+.cmd pre { margin: 0; padding: 12px 14px; }
+.cmd code { font: 14px/1.55 var(--f-mono); color: var(--term-fg); white-space: pre-wrap; overflow-wrap: anywhere; }
+.cmd code::before { content: "$ "; color: var(--term-prompt); }
+.hash {
+  font: 500 13px/1.5 var(--f-mono); word-break: break-all; background: var(--bg);
+  border: 1px dashed var(--line); border-radius: 6px; padding: 8px 10px;
+}
+code.inline { font: 14px var(--f-mono); background: var(--bg); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
+
+/* ---------- Teclas ---------- */
+kbd {
+  display: inline-block; min-width: 1.9em; text-align: center; font: 600 13px/1 var(--f-body);
+  padding: 5px 6px 4px; color: var(--ink); background: var(--key-bg);
+  border: 1px solid var(--key-edge); border-bottom-width: 3px; border-radius: 6px; white-space: nowrap;
+}
+.teclas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.teclas div {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 9px 12px; background: var(--bg); border-radius: 8px; min-width: 0;
+}
+.teclas span:last-child { color: var(--muted); font-size: 14px; text-align: right; }
+.teclas span:first-child { display: flex; gap: 3px; flex-wrap: wrap; flex: none; }
+
+/* ---------- Tabela do instalador ---------- */
+.tabela { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 11px/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+td:first-child { font-weight: 600; white-space: nowrap; }
+td .marque { color: var(--ok); font-weight: 600; }
+
+.dois { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.dois > div { background: var(--bg); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; min-width: 0; }
+.dois h4 { margin: 0; font: 600 15px/1.2 var(--f-display); }
+.dois p { font-size: 15px; }
+
+/* ---------- Problemas ---------- */
+details.prob { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); margin-top: 8px; }
+details.prob summary {
+  cursor: pointer; padding: 14px 18px; font: 600 17px/1.3 var(--f-display); list-style: none;
+  display: flex; gap: 12px; align-items: baseline;
+}
+details.prob summary::-webkit-details-marker { display: none; }
+details.prob summary::after { content: "+"; margin-left: auto; color: var(--muted); font-family: var(--f-mono); }
+details.prob[open] summary::after { content: "−"; }
+details.prob .corpo { padding: 0 18px 16px; display: grid; gap: 10px; }
+details.prob .corpo p { margin: 0; }
+details.alt summary { cursor: pointer; color: var(--accent); font-weight: 500; }
+details.alt[open] > div { margin-top: 10px; display: grid; gap: 10px; }
+
+footer.fim { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 14px; display: grid; gap: 10px; }
+footer.fim button {
+  justify-self: start; font: 500 13px/1 var(--f-mono); color: var(--muted); background: none;
+  border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .progresso .trilho { display: none; }
+  .etapa { padding: 14px 14px 16px; }
+  h2 { font-size: 26px; }
+  .feito .txt { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+<style>body{margin:0} :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} [hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section class="capa">
+    <div class="olho">Manual de instalação · Ubuntu-Mac</div>
+    <h1>Ubuntu no MacBook Air</h1>
+    <p class="lead">Troque o macOS pelo Xubuntu 26.04 já configurado, com teclado de Mac, Claude Desktop e Claude Code. Marque cada etapa ao terminar: o progresso fica salvo neste aparelho.</p>
+    <dl class="ficha">
+      <div><dt>Máquina</dt><dd>MacBook Air 11" · 2015</dd></div>
+      <div><dt>Sistema</dt><dd>Xubuntu 26.04.1 LTS</dd></div>
+      <div><dt>Tempo</dt><dd>≈ 2 horas</dd></div>
+      <div><dt>Download</dt><dd>≈ 8 GB no total</dd></div>
+    </dl>
+    <div class="aviso"><strong>Abra este manual no celular.</strong> O disco do Mac é apagado na Parte B.</div>
+    <div>
+      <p style="margin:0 0 8px;font-weight:600">Você vai precisar de</p>
+      <ul class="precisa">
+        <li>Pendrive de 8 GB ou mais (ele será apagado)</li>
+        <li>Carregador do Mac ligado na tomada o tempo todo</li>
+        <li>Cabo USB do celular, para a internet durante a instalação</li>
+        <li>Senha do Wi-Fi de casa</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<nav class="barra" aria-label="Partes do manual">
+  <div class="wrap">
+    <div class="partes">
+      <a href="#parte-a"><span>A</span>macOS</a>
+      <a href="#parte-b"><span>B</span>Instalar</a>
+      <a href="#parte-c"><span>C</span>Comando</a>
+      <a href="#parte-d"><span>D</span>Claude</a>
+      <a href="#parte-e"><span>E</span>Teclado</a>
+      <a href="#parte-f"><span>F</span>Ajuda</a>
+    </div>
+    <div class="progresso" aria-live="polite"><div class="trilho"><div class="cheio" id="cheio"></div></div><span id="contagem">0/0</span></div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= A ================= -->
+<section class="parte" id="parte-a">
+  <header><div class="letra">Parte A</div><h2>No macOS, antes de apagar</h2><p>Tudo aqui acontece no Mac como ele está hoje.</p></header>
+
+  <article class="etapa" data-etapa="A1">
+    <header><span class="codigo">A1</span><h3>Fazer backup</h3><label class="feito"><input type="checkbox" id="chk-A1"><span class="txt">feito</span></label></header>
+    <p>A instalação <strong>apaga o disco inteiro</strong>. Copie para a nuvem ou um HD externo: documentos, fotos, downloads, área de trabalho, favoritos e senhas do navegador.</p>
+    <p class="nota">Confira se o backup abre em outro aparelho antes de seguir. Para voltar ao macOS depois, veja F7.</p>
+  </article>
+
+  <article class="etapa" data-etapa="A2">
+    <header><span class="codigo">A2</span><h3>Repositório público ou privado</h3><label class="feito"><input type="checkbox" id="chk-A2"><span class="txt">feito</span></label></header>
+    <p>O comando da Parte C baixa os scripts do GitHub (<code class="inline">LifeB69/Ubuntu-Mac</code>). Escolha um caminho:</p>
+    <div class="dois">
+      <div><h4>Público (mais fácil)</h4><p>No GitHub: repositório → <strong>Settings → General → Danger Zone → Change visibility → Public</strong>. Não há senhas nem dados pessoais nele.</p></div>
+      <div><h4>Privado</h4><p>Sem problema. Na etapa C3 você baixa o ZIP pelo Firefox, já logado no GitHub.</p></div>
+    </div>
+  </article>
+
+  <article class="etapa" data-etapa="A3">
+    <header><span class="codigo">A3</span><h3>Baixar o Xubuntu</h3><label class="feito"><input type="checkbox" id="chk-A3"><span class="txt">feito</span></label></header>
+    <p>Arquivo de cerca de 5 GB:</p>
+    <p><a href="https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso">xubuntu-26.04.1-desktop-amd64.iso</a></p>
+  </article>
+
+  <article class="etapa" data-etapa="A4">
+    <header><span class="codigo">A4</span><h3>Conferir se o arquivo veio inteiro</h3><label class="feito"><input type="checkbox" id="chk-A4"><span class="txt">feito</span></label></header>
+    <p>Abra o <strong>Terminal</strong> (<kbd>⌘</kbd> <kbd>Espaço</kbd> → "Terminal") e rode:</p>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do macOS</span><button type="button">Copiar</button></div><pre><code>shasum -a 256 ~/Downloads/xubuntu-26.04.1-desktop-amd64.iso</code></pre></div>
+    <p>O resultado tem que ser exatamente:</p>
+    <div class="hash">0cd5160f72ae6b7a26be7a29248b60cbd579b9e6aa8fbd274e95264da0ade43d</div>
+    <p class="nota">Se for diferente, apague o arquivo e baixe de novo.</p>
+  </article>
+
+  <article class="etapa" data-etapa="A5">
+    <header><span class="codigo">A5</span><h3>Gravar o pendrive</h3><label class="feito"><input type="checkbox" id="chk-A5"><span class="txt">feito</span></label></header>
+    <ol>
+      <li>Instale o <a href="https://etcher.balena.io/">balenaEtcher</a>, versão para macOS. Ele exige macOS 11 ou mais novo; o Monterey (12) atende. Se o macOS bloquear: <strong>Preferências do Sistema → Segurança e Privacidade → Abrir Mesmo Assim</strong>.</li>
+      <li>No Etcher: <strong>Flash from file</strong> → escolha o <code class="inline">.iso</code> → <strong>Select target</strong> → escolha o <strong>pendrive</strong> (confira o tamanho) → <strong>Flash!</strong></li>
+      <li>Digite a senha do Mac e espere o "Validating" terminar. Se o macOS disser que "o disco não pode ser lido", clique em <strong>Ejetar</strong>: é normal.</li>
+    </ol>
+    <details class="alt"><summary>Sem o Etcher, pelo Terminal</summary><div>
+      <div class="cmd"><div class="topo"><span class="onde">1 · achar o pendrive pelo tamanho</span><button type="button">Copiar</button></div><pre><code>diskutil list</code></pre></div>
+      <p class="nota">Nos comandos abaixo, troque <code class="inline">disk2</code> pelo número do seu pendrive. <strong>Errar o número apaga o disco errado.</strong></p>
+      <div class="cmd"><div class="topo"><span class="onde">2 · desmontar</span><button type="button">Copiar</button></div><pre><code>diskutil unmountDisk /dev/disk2</code></pre></div>
+      <div class="cmd"><div class="topo"><span class="onde">3 · gravar (5 a 15 min · Ctrl+T mostra o progresso)</span><button type="button">Copiar</button></div><pre><code>sudo dd if=$HOME/Downloads/xubuntu-26.04.1-desktop-amd64.iso of=/dev/rdisk2 bs=4m</code></pre></div>
+      <div class="cmd"><div class="topo"><span class="onde">4 · ejetar</span><button type="button">Copiar</button></div><pre><code>diskutil eject /dev/disk2</code></pre></div>
+    </div></details>
+  </article>
+</section>
+
+<!-- ================= B ================= -->
+<section class="parte" id="parte-b">
+  <header><div class="letra">Parte B</div><h2>Instalar o Xubuntu</h2><p>Daqui em diante o macOS deixa de existir.</p></header>
+
+  <article class="etapa" data-etapa="B1">
+    <header><span class="codigo">B1</span><h3>Ligar pelo pendrive</h3><label class="feito"><input type="checkbox" id="chk-B1"><span class="txt">feito</span></label></header>
+    <ol>
+      <li>Desligue o Mac. Coloque o pendrive e o carregador.</li>
+      <li>Ligue <strong>segurando</strong> <kbd>⌥</kbd> até aparecerem os ícones de disco.</li>
+      <li>Escolha o ícone amarelo <strong>EFI Boot</strong> e aperte <kbd>↩</kbd>.</li>
+      <li>No menu preto, escolha <strong>Try or Install Xubuntu</strong>.</li>
+    </ol>
+  </article>
+
+  <article class="etapa" data-etapa="B2">
+    <header><span class="codigo">B2</span><h3>Internet pelo celular</h3><label class="feito"><input type="checkbox" id="chk-B2"><span class="txt">feito</span></label></header>
+    <p>O Wi-Fi do Mac <strong>ainda não funciona</strong> nesta etapa, porque falta o driver. Use o cabo:</p>
+    <div class="dois">
+      <div><h4>Android</h4><p>Conecte o cabo → <strong>Configurações → Rede e Internet → Ponto de acesso → Ancoragem USB</strong>.</p></div>
+      <div><h4>iPhone</h4><p>Conecte o cabo → toque em <strong>Confiar</strong> → <strong>Ajustes → Acesso Pessoal → Permitir que outros acessem</strong>.</p></div>
+    </div>
+    <p class="nota">No canto superior direito deve aparecer o ícone de rede com fio.</p>
+    <p class="dica"><strong>Dá para testar antes de apagar:</strong> escolha "Experimentar o Xubuntu" e confira teclado, touchpad, som e tela. Para instalar depois, use o ícone "Instalar Xubuntu" na área de trabalho.</p>
+  </article>
+
+  <article class="etapa" data-etapa="B3">
+    <header><span class="codigo">B3</span><h3>O instalador, tela por tela</h3><label class="feito"><input type="checkbox" id="chk-B3"><span class="txt">feito</span></label></header>
+    <div class="tabela"><table>
+      <thead><tr><th>Tela</th><th>O que escolher</th></tr></thead>
+      <tbody>
+        <tr><td>Idioma</td><td>Português (Brasil)</td></tr>
+        <tr><td>Acessibilidade</td><td>Próximo</td></tr>
+        <tr><td>Teclado</td><td>English (US) / English (US). O script ajusta os acentos depois.</td></tr>
+        <tr><td>Internet</td><td>Usar conexão com fio (é o celular)</td></tr>
+        <tr><td>Atualizar instalador</td><td>Se aparecer, pode pular</td></tr>
+        <tr><td>Tipo</td><td>Instalação interativa</td></tr>
+        <tr><td>Aplicativos</td><td>Seleção padrão</td></tr>
+        <tr><td>Software adicional</td><td><span class="marque">✓ Marque "Instalar software de terceiros para placas gráficas e Wi-Fi".</span> É o driver do Wi-Fi. Formatos de mídia: opcional.</td></tr>
+        <tr><td>Como instalar</td><td>Apagar o disco e instalar o Xubuntu. Confirme. Não precisa de criptografia.</td></tr>
+        <tr><td>Conta</td><td>Nome, nome do computador, usuário em minúsculas e uma senha que você não vai esquecer (o <code class="inline">sudo</code> pede ela)</td></tr>
+        <tr><td>Fuso horário</td><td>São Paulo, ou o seu</td></tr>
+        <tr><td>Revisar</td><td>Instalar · leva de 15 a 30 minutos</td></tr>
+      </tbody>
+    </table></div>
+  </article>
+
+  <article class="etapa" data-etapa="B4">
+    <header><span class="codigo">B4</span><h3>Reiniciar</h3><label class="feito"><input type="checkbox" id="chk-B4"><span class="txt">feito</span></label></header>
+    <p>Clique em <strong>Reiniciar agora</strong>. Quando pedir, tire o pendrive e aperte <kbd>↩</kbd>. <strong>Guarde o pendrive:</strong> ele tem o driver do Wi-Fi de reserva (F3).</p>
+    <p class="nota">Se o Mac não iniciar no Ubuntu sozinho, ligue segurando <kbd>⌥</kbd> e escolha EFI Boot (agora o do disco interno). Depois disso costuma ir direto.</p>
+  </article>
+</section>
+
+<!-- ================= C ================= -->
+<section class="parte" id="parte-c">
+  <header><div class="letra">Parte C</div><h2>O comando que configura tudo</h2><p>Um comando faz drivers, teclado, touchpad, bateria, programas e aparência.</p></header>
+
+  <article class="etapa" data-etapa="C1">
+    <header><span class="codigo">C1</span><h3>Entrar e conectar</h3><label class="feito"><input type="checkbox" id="chk-C1"><span class="txt">feito</span></label></header>
+    <ol>
+      <li>Entre com a sua senha.</li>
+      <li>No ícone de rede (canto superior direito): se aparecerem redes Wi-Fi, conecte na de casa. Se não aparecer nenhuma, continue com o celular no cabo; o script instala o Wi-Fi.</li>
+    </ol>
+    <p class="dica"><strong>Espere uns 5 minutos depois do primeiro login.</strong> O Ubuntu termina a preparação inicial em segundo plano. Se rodar antes, o script espera; só demora mais.</p>
+  </article>
+
+  <article class="etapa" data-etapa="C2">
+    <header><span class="codigo">C2</span><h3>Abrir o Terminal</h3><label class="feito"><input type="checkbox" id="chk-C2"><span class="txt">feito</span></label></header>
+    <p>Aperte <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>T</kbd>. No Mac são as teclas <kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>T</kbd>.</p>
+    <p class="nota">Até o script rodar, as teclas são as do Linux: o <kbd>⌘</kbd> ainda não funciona como no Mac. Para copiar o comando abaixo, abra este manual no Firefox do próprio Mac, copie com <kbd>Ctrl</kbd> <kbd>C</kbd> e cole no Terminal com <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>V</kbd>.</p>
+  </article>
+
+  <article class="etapa" data-etapa="C3">
+    <header><span class="codigo">C3</span><h3>Rodar o comando</h3><label class="feito"><input type="checkbox" id="chk-C3"><span class="txt">feito</span></label></header>
+    <p><strong>Repositório público:</strong></p>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash</code></pre></div>
+    <p><strong>Repositório privado:</strong> no Firefox, entre no GitHub → <strong>LifeB69/Ubuntu-Mac</strong> → <strong>Code → Download ZIP</strong>. Depois:</p>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>cd ~/Downloads &amp;&amp; unzip -oq Ubuntu-Mac-*.zip &amp;&amp; bash Ubuntu-Mac-*/comecar.sh</code></pre></div>
+  </article>
+
+  <article class="etapa" data-etapa="C4">
+    <header><span class="codigo">C4</span><h3>Esperar de 20 a 40 minutos</h3><label class="feito"><input type="checkbox" id="chk-C4"><span class="txt">feito</span></label></header>
+    <ul>
+      <li>Ele pede a <strong>sua senha uma vez</strong>. Ao digitar, nada aparece na tela; é normal.</li>
+      <li>Cada passo mostra <strong>OK</strong>, <strong>FALHOU</strong> ou <strong>pulado</strong>, e os longos mostram o tempo decorrido. "Atualizar todos os pacotes" pode levar de 10 a 20 minutos.</li>
+      <li><strong>Se algo falhar, ele não para:</strong> anota e segue.</li>
+      <li>Deixe a tampa aberta e o carregador ligado. A tela não bloqueia e o Mac não suspende enquanto ele roda; se a tela apagar, mexa no touchpad.</li>
+    </ul>
+  </article>
+
+  <article class="etapa" data-etapa="C5">
+    <header><span class="codigo">C5</span><h3>Reiniciar</h3><label class="feito"><input type="checkbox" id="chk-C5"><span class="txt">feito</span></label></header>
+    <p>No fim aparece um resumo e a pergunta <strong>"Reiniciar agora? [s/N]"</strong>. Digite <kbd>s</kbd> e <kbd>↩</kbd>.</p>
+    <p class="nota">Teve falhas? Rode de novo depois de reiniciar (D1). É seguro repetir, e muitas somem na segunda vez.</p>
+  </article>
+</section>
+
+<!-- ================= D ================= -->
+<section class="parte" id="parte-d">
+  <header><div class="letra">Parte D</div><h2>Depois de reiniciar</h2><p>Conferir, entrar no Claude e deixar o ajuste fino com ele.</p></header>
+
+  <article class="etapa" data-etapa="D1">
+    <header><span class="codigo">D1</span><h3>Conferir se está tudo certo</h3><label class="feito"><input type="checkbox" id="chk-D1"><span class="txt">feito</span></label></header>
+    <p>No Terminal (<kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>T</kbd>):</p>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>ubuntu-mac --verificar</code></pre></div>
+    <p>Mostra ✔ ou ✘ para Wi-Fi, memória, bateria, teclado, touchpad, gestos, programas e dock, com a dica de como resolver cada ✘. Para rodar a instalação de novo, digite só <code class="inline">ubuntu-mac</code>.</p>
+  </article>
+
+  <article class="etapa" data-etapa="D2">
+    <header><span class="codigo">D2</span><h3>Entrar no Claude Desktop</h3><label class="feito"><input type="checkbox" id="chk-D2"><span class="txt">feito</span></label></header>
+    <p>Clique no ícone do Claude na dock e faça login. Feche e abra de novo para confirmar que o login ficou salvo.</p>
+  </article>
+
+  <article class="etapa" data-etapa="D3">
+    <header><span class="codigo">D3</span><h3>Claude Code: o ajuste fino</h3><label class="feito"><input type="checkbox" id="chk-D3"><span class="txt">feito</span></label></header>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>cd ~/Ubuntu-Mac &amp;&amp; claude</code></pre></div>
+    <p>Faça login e peça: <em>"leia o CLAUDE.md e faça a checagem pós-instalação"</em>. Ele lê os logs, corrige o que falhou e testa com você o que só dá para testar no Mac: suspensão, webcam, ventoinha e gestos.</p>
+  </article>
+
+  <article class="etapa" data-etapa="D4">
+    <header><span class="codigo">D4</span><h3>Opcional: o Claude usando o navegador</h3><label class="feito"><input type="checkbox" id="chk-D4"><span class="txt">feito</span></label></header>
+    <ol>
+      <li>Abra o Google Chrome (Menu → Internet).</li>
+      <li>Instale a extensão Claude pela Chrome Web Store e entre com a mesma conta.</li>
+      <li>No Claude Code, digite <code class="inline">/chrome</code>.</li>
+    </ol>
+    <p class="nota">No Firefox essa extensão não existe; ele continua sendo o navegador do dia a dia.</p>
+  </article>
+</section>
+
+<!-- ================= E ================= -->
+<section class="parte" id="parte-e">
+  <header><div class="letra">Parte E</div><h2>Teclado e touchpad</h2><p>Depois de reiniciar, tudo funciona como no macOS. Os mais usados:</p></header>
+
+  <article class="etapa">
+    <div class="teclas">
+      <div><span><kbd>⌘</kbd><kbd>C</kbd> <kbd>⌘</kbd><kbd>V</kbd></span><span>copiar e colar, inclusive no Terminal</span></div>
+      <div><span><kbd>⌃</kbd><kbd>C</kbd></span><span>interromper no Terminal</span></div>
+      <div><span><kbd>⌘</kbd><kbd>Tab</kbd></span><span>trocar de aplicativo</span></div>
+      <div><span><kbd>⌘</kbd><kbd>Espaço</kbd></span><span>buscar aplicativos</span></div>
+      <div><span><kbd>⌘</kbd><kbd>Q</kbd></span><span>fechar o aplicativo</span></div>
+      <div><span><kbd>⌘</kbd><kbd>⇧</kbd><kbd>4</kbd></span><span>capturar uma área</span></div>
+      <div><span><kbd>⌥</kbd><kbd>E</kbd> <kbd>A</kbd></span><span>á (⌥N A = ã, ⌥I E = ê)</span></div>
+      <div><span><kbd>⌥</kbd><kbd>C</kbd></span><span>ç</span></div>
+      <div><span><kbd>⌥</kbd><kbd>←</kbd> <kbd>⌥</kbd><kbd>→</kbd></span><span>pular palavra</span></div>
+      <div><span><kbd>F3</kbd></span><span>todas as janelas</span></div>
+      <div><span><kbd>F4</kbd></span><span>aplicativos</span></div>
+      <div><span><kbd>⌃</kbd><kbd>⌘</kbd><kbd>Q</kbd></span><span>bloquear a tela</span></div>
+      <div><span><kbd>⌥</kbd><kbd>⌘</kbd><kbd>Esc</kbd></span><span>forçar encerrar</span></div>
+      <div><span><kbd>⏻</kbd></span><span>pergunta antes de desligar</span></div>
+    </div>
+    <p class="nota">Touchpad: rolagem natural, toque para clicar, dois dedos = botão direito, pinça = zoom, três dedos ← → trocam de área de trabalho, três dedos ↑ mostram todas as janelas. Os gestos começam a funcionar depois de reiniciar.</p>
+    <p>Lista completa: <a href="https://github.com/LifeB69/Ubuntu-Mac/blob/main/ATALHOS.md">ATALHOS.md</a></p>
+  </article>
+</section>
+
+<!-- ================= F ================= -->
+<section class="parte" id="parte-f">
+  <header><div class="letra">Parte F</div><h2>Se algo der errado</h2></header>
+
+  <details class="prob"><summary><span class="codigo">F1</span>Segurando ⌥, o "EFI Boot" não aparece</summary><div class="corpo">
+    <p>Grave o pendrive de novo (A5), use a outra porta USB e segure <kbd>⌥</kbd> antes do som de inicialização.</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F2</span>Sem internet no instalador</summary><div class="corpo">
+    <p>Android: desligue e ligue a Ancoragem USB. iPhone: desconecte, reconecte, toque em Confiar e deixe a tela do Acesso Pessoal aberta. Se não der, instale sem internet: o driver do Wi-Fi vem no pendrive.</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F3</span>Depois de instalar, o Wi-Fi não aparece</summary><div class="corpo">
+    <p>Conecte o celular no cabo e rode o comando da C3: o script instala o driver.</p>
+    <p><strong>Sem internet nenhuma:</strong> conecte o pendrive do Xubuntu, abra-o no gerenciador de arquivos (para ele ser montado) e rode:</p>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>sudo apt install /media/$USER/*/pool/main/d/dkms/dkms_*.deb /media/$USER/*/pool/restricted/b/broadcom-sta/broadcom-sta-dkms_*.deb</code></pre></div>
+    <p>Reinicie, conecte no Wi-Fi e siga da C3.</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F4</span>"Não consegui baixar o projeto do GitHub"</summary><div class="corpo">
+    <p>O repositório está privado. Use o caminho do ZIP (C3, segunda opção).</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F5</span>"O Ubuntu-Mac já está rodando em outro terminal"</summary><div class="corpo">
+    <p>Outra janela ainda está instalando. Espere ela terminar.</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F6</span>Algum passo deu FALHOU</summary><div class="corpo">
+    <p>Rode <code class="inline">ubuntu-mac</code> de novo. Se continuar, abra o Claude Code em <code class="inline">~/Ubuntu-Mac</code> e peça "leia logs/ultimo e resolva as falhas". Os detalhes ficam em <code class="inline">~/Ubuntu-Mac/logs/ultimo/</code>.</p>
+  </div></details>
+
+  <details class="prob"><summary><span class="codigo">F7</span>Quero o macOS de volta</summary><div class="corpo">
+    <p>Desligue e ligue segurando <kbd>⌥</kbd> <kbd>⌘</kbd> <kbd>R</kbd> (Recuperação pela Internet, precisa de Wi-Fi) → Utilitário de Disco: apague o disco interno (APFS) → Reinstalar o macOS.</p>
+  </div></details>
+</section>
+
+<footer class="fim">
+  <p>Ubuntu-Mac · Xubuntu 26.04.1 LTS no MacBook Air 7,1 · versão em texto: <a href="https://github.com/LifeB69/Ubuntu-Mac/blob/main/PASSO-A-PASSO.md">PASSO-A-PASSO.md</a></p>
+  <button type="button" id="zerar">Desmarcar todas as etapas</button>
+</footer>
+
+</main>
+
+<script>
+(function () {
+  var CHAVE = "ubuntu-mac-manual-v1";
+  var caixas = Array.prototype.slice.call(document.querySelectorAll(".etapa input[type=checkbox]"));
+  var estado = {};
+  try { estado = JSON.parse(localStorage.getItem(CHAVE) || "{}") || {}; } catch (e) { estado = {}; }
+
+  function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(estado)); } catch (e) {} }
+  function atualizar() {
+    var feitas = 0;
+    caixas.forEach(function (c) {
+      var etapa = c.closest(".etapa");
+      etapa.classList.toggle("feita", c.checked);
+      if (c.checked) feitas++;
+    });
+    document.getElementById("contagem").textContent = feitas + "/" + caixas.length;
+    document.getElementById("cheio").style.width = (caixas.length ? (feitas / caixas.length) * 100 : 0) + "%";
+  }
+  caixas.forEach(function (c) {
+    c.checked = !!estado[c.id];
+    c.addEventListener("change", function () { estado[c.id] = c.checked; salvar(); atualizar(); });
+  });
+  document.getElementById("zerar").addEventListener("click", function () {
+    estado = {}; caixas.forEach(function (c) { c.checked = false; }); salvar(); atualizar();
+  });
+  atualizar();
+
+  document.querySelectorAll(".cmd button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var code = b.closest(".cmd").querySelector("code");
+      var texto = code.textContent;
+      function marcar(msg) { b.textContent = msg; b.classList.add("ok"); setTimeout(function () { b.textContent = "Copiar"; b.classList.remove("ok"); }, 1800); }
+      function selecionar() {
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        marcar("Selecionado");
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(function () { marcar("Copiado"); }, selecionar);
+      } else { selecionar(); }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

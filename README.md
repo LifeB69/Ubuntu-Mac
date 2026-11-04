@@ -13,7 +13,7 @@ Você instala o sistema, roda **um comando**, reinicia e está pronto.
 
 ## Como instalar
 
-📋 **Siga o [PASSO-A-PASSO.md](PASSO-A-PASSO.md)**, que vai do backup no macOS até o Claude funcionando, com solução de problemas.
+📋 **Siga o [PASSO-A-PASSO.md](PASSO-A-PASSO.md)**, que vai do backup no macOS até o Claude funcionando, com solução de problemas. A versão visual, com etapas marcáveis e botões de copiar, é o [MANUAL.html](MANUAL.html).
 
 Resumo:
 1. No macOS: backup → baixar o [Xubuntu 26.04.1](https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso) → gravar no pendrive.
