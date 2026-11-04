@@ -44,13 +44,13 @@ Resumo:
 | `01-sistema` | Atualiza tudo, instala ferramentas (git, curl, htop, ripgrep…) e define o fuso horário |
 | `02-wifi-broadcom` | Driver `wl` do BCM4360, pela internet ou **pelo pendrive** se não houver internet |
 | `03-memoria` | **zram** (swap comprimido em RAM, ~60%) e **earlyoom** (evita que o sistema congele sem memória) |
-| `04-energia` | **TLP** (bateria), **thermald** (temperatura) e **mbpfan** (ventoinha do MacBook) |
-| `05-teclado` | Layout US com acentos no Option direito e **⌘ funcionando como no Mac** (keyd) |
+| `04-energia` | **TLP** (bateria), **thermald** (temperatura), **mbpfan** (ventoinha), tecla ⏻ pergunta em vez de desligar, tampa suspende, bateria crítica desliga com segurança |
+| `05-teclado` | **Teclado igual ao do Mac** (keyd + layout *English (Macintosh)*): ⌘, ⌥ com acentos, ⌃, teclas F; ⌘C/⌘V também no Terminal (ver [ATALHOS.md](ATALHOS.md)) |
 | `06-touchpad` | Rolagem natural, toque para clicar, botão direito com dois dedos, **gestos de 3 e 4 dedos e pinça para zoom** |
 | `07-ajustes-mac` | TRIM do SSD, microcódigo Intel e internet do iPhone/Android via cabo |
 | `08-programas` | Firefox `.deb` em português (abre bem mais rápido que o Snap), **Google Chrome** (para o Claude in Chrome), fontes, tema Arc, ícones Papirus e dock Plank |
 | `09-claude` | **Claude Desktop** (repositório oficial da Anthropic) e **Claude Code** (`claude` no terminal) |
-| `10-interface` | Dock embaixo, botões das janelas à esquerda, fontes e atalhos |
+| `10-interface` | Dock embaixo, barra de cima no estilo do Mac (relógio, sem lista de janelas), botões das janelas à esquerda, tema e fontes |
 
 As opções ficam em [`config.conf`](config.conf) (layout do teclado, ⌘ como Ctrl, Firefox, Cowork etc.).
 

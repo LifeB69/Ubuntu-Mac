@@ -52,7 +52,7 @@ else
      passo "Instalar Firefox .deb (pt-BR)" tentar 2 sudo apt-get "${APT_OPTS[@]}" install --allow-downgrades firefox firefox-l10n-pt-br &&
      firefox_deb_ok; then
     passo "Firefox como navegador padrão" navegador_padrao_firefox
-    if snap list firefox >/dev/null 2>&1; then
+    if timeout 15 snap list firefox >/dev/null 2>&1; then
       # Logo após a instalação o snapd ainda está "semeando" os snaps iniciais
       # e recusa remoções ("seed change in progress"). Espera terminar (até 10 min).
       if passo "Esperar o snapd terminar a preparação inicial" esperar_snapd; then

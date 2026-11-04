@@ -11,7 +11,7 @@ Guia completo para trocar o macOS pelo **Xubuntu 26.04** já configurado, com Cl
 - [ ] **Carregador** do Mac, ligado na tomada o tempo todo.
 - [ ] **Cabo USB do celular** (o MacBook Air 2015 tem USB-A normal).
 - [ ] Senha do Wi-Fi de casa.
-- [ ] Internet para baixar cerca de **3 GB**: 5 GB do sistema no passo A3, mais uns 2 a 3 GB de atualizações e programas no passo C. Se puder, use Wi-Fi em vez dos dados do celular.
+- [ ] Internet para baixar cerca de **8 GB** no total: 5 GB do sistema (passo A3, ainda no macOS) e de 2 a 3 GB de atualizações e programas (passo C). No passo C, prefira o Wi-Fi de casa aos dados do celular.
 
 ---
 
@@ -131,7 +131,9 @@ Clique em **Reiniciar agora**. Quando pedir, **tire o pendrive** e aperte Enter.
 Aperte **Ctrl+Alt+T** (ou Menu → Terminal).
 
 ### C3. Rodar o comando
-**Se o repositório é público**, digite (ou copie e cole com **Ctrl+Shift+V**):
+> **Dica para não digitar:** abra este guia no **Firefox do próprio Mac** (github.com/LifeB69/Ubuntu-Mac → PASSO-A-PASSO.md), selecione o comando e copie com **Ctrl+C**. No Terminal, cole com **Ctrl+Shift+V**. (Até o script rodar, as teclas ainda são as do Linux: o ⌘ ainda não funciona como no Mac.)
+
+**Se o repositório é público:**
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash
@@ -151,7 +153,7 @@ cd ~/Downloads && unzip -oq Ubuntu-Mac-*.zip && bash Ubuntu-Mac-*/comecar.sh
 - Cada passo aparece com **OK**, **FALHOU** ou **pulado**, e os passos longos mostram o tempo decorrido. A primeira parte, "Atualizar todos os pacotes", pode levar de 10 a 20 minutos.
 - **Se algo falhar, ele não para:** anota o erro e segue.
 - **Deixe a tampa aberta e o carregador ligado.** Leva de 20 a 40 minutos.
-- Se a tela **apagar ou bloquear** no meio, é só o protetor de tela: mexa no touchpad e digite a senha. A instalação continua por trás, e o notebook não entra em suspensão enquanto ela roda.
+- A tela não bloqueia e o notebook não entra em suspensão enquanto a instalação roda. Se a tela **apagar** (economia de energia), mexa no touchpad: a instalação continua por trás.
 
 ### C5. Final
 Aparece um **resumo** (OK, falhas, pulados) e a pergunta **"Reiniciar agora? [s/N]"**: digite `s` e Enter.
@@ -223,7 +225,12 @@ Grave o pendrive de novo (A5), use a outra porta USB e segure ⌥ **antes** do s
 Android: desligue e ligue a "Ancoragem USB". iPhone: desconecte, reconecte, toque em **Confiar** e deixe a tela de **Acesso Pessoal** aberta. Se não der, instale sem internet: o driver do Wi-Fi vem no pendrive.
 
 **F3. Depois de instalar, o Wi-Fi não aparece.**
-Conecte o celular no cabo e rode o comando do C3. **Sem internet nenhuma:** conecte o **pendrive do Xubuntu** e rode `~/Ubuntu-Mac/instalar.sh --somente 02`, que instala o driver direto do pendrive (para isso a pasta `~/Ubuntu-Mac` já precisa existir). Reinicie.
+Conecte o celular no cabo e rode o comando do C3: o script instala o driver.
+**Sem internet nenhuma:** o driver está no pendrive do Xubuntu. Conecte o pendrive, abra-o no gerenciador de arquivos (para ele ser montado) e rode no Terminal:
+```bash
+sudo apt install /media/$USER/*/pool/main/d/dkms/dkms_*.deb /media/$USER/*/pool/restricted/b/broadcom-sta/broadcom-sta-dkms_*.deb
+```
+Reinicie, conecte no Wi-Fi e siga do passo C3.
 
 **F4. O comando do C3 diz "Não consegui baixar o projeto do GitHub".**
 O repositório é privado: use o caminho do **ZIP** (C3, segunda opção).

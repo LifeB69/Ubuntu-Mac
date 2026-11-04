@@ -20,7 +20,8 @@ checa() { # checa "descrição" "dica se falhar" comando...
 ativo() { systemctl is-active --quiet "$1"; }
 instalado() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | contem 'install ok installed'; }
 
-echo "${B}Ubuntu-Mac — verificação${Z}  ($(cat /sys/class/dmi/id/product_name 2>/dev/null), kernel $(uname -r))"
+modelo="$(cat /sys/class/dmi/id/product_name 2>/dev/null)"
+echo "${B}Ubuntu-Mac — verificação${Z}  (${modelo:+$modelo, }kernel $(uname -r))"
 
 echo; echo "${B}Wi-Fi${Z}"
 checa "Driver wl carregado" "dkms status; sudo modprobe wl; veja logs/ultimo/instalacao.log (02-wifi)" \
@@ -76,9 +77,9 @@ fi
 
 echo; echo "${B}Programas${Z}"
 if dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem -v snap; then ok "Firefox (.deb da Mozilla)"
-elif snap list firefox >/dev/null 2>&1; then talvez "Firefox ainda é o Snap" "./instalar.sh --somente 08"
+elif timeout 15 snap list firefox >/dev/null 2>&1; then talvez "Firefox ainda é o Snap" "./instalar.sh --somente 08"
 else nao "Firefox" "./instalar.sh --somente 08"; fi
-if snap list firefox >/dev/null 2>&1 && dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem -v snap; then
+if timeout 15 snap list firefox >/dev/null 2>&1 && dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem -v snap; then
   talvez "Há dois Firefox (Snap e .deb)" "sudo snap remove --purge firefox"
 fi
 checa "Google Chrome (para o Claude in Chrome)" "./instalar.sh --somente 08 (ou INSTALAR_CHROME=0 no config.conf)" instalado google-chrome-stable

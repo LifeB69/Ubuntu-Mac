@@ -64,4 +64,3 @@ passo "⌘Espaço: buscar aplicativos" atalho "<Super>space" "xfce4-popup-whiske
 passo "⌘⇧3: captura da tela inteira" atalho "<Primary><Shift>numbersign" "xfce4-screenshooter -f"
 passo "⌘⇧4: captura de uma área" atalho "<Primary><Shift>dollar" "xfce4-screenshooter -r"
 passo "⌘⇧5: opções de captura" atalho "<Primary><Shift>percent" "xfce4-screenshooter"
-passo "Ctrl+Alt+T: terminal" atalho "<Primary><Alt>t" "xfce4-terminal"

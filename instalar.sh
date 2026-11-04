@@ -82,7 +82,14 @@ fi
 # Mantém o sudo ativo enquanto o script roda.
 ( while kill -0 $$ 2>/dev/null; do sudo -n -v 2>/dev/null; sleep 50; done ) &
 SUDO_PID=$!
-trap 'kill $SUDO_PID 2>/dev/null' EXIT
+# A tela não bloqueia enquanto instala (o protetor de tela do Xfce não respeita
+# o systemd-inhibit). A inibição acaba sozinha quando o script termina.
+INIBE_PID=""
+if em_sessao_grafica && command -v xfce4-screensaver-command >/dev/null; then
+  xfce4-screensaver-command --inhibit >/dev/null 2>&1 9>&- &
+  INIBE_PID=$!
+fi
+trap 'kill $SUDO_PID $INIBE_PID 2>/dev/null' EXIT
 
 {
   echo "Ubuntu-Mac — início: $(date)"
