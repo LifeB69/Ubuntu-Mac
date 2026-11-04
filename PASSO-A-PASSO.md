@@ -19,8 +19,8 @@ Há também uma **versão visual**, com etapas marcáveis e botões para copiar 
 ## Parte A — No macOS (antes de apagar)
 
 ### A1. Backup
-A instalação **apaga o disco inteiro**. Copie para a nuvem ou para um HD externo:
-documentos, fotos, downloads, área de trabalho, favoritos e senhas do navegador.
+A instalação **apaga o disco inteiro**: o macOS **e qualquer outro sistema que esteja nele (como o seu Alpine)**. Copie para a nuvem ou para um HD externo:
+documentos, fotos, downloads, área de trabalho, favoritos e senhas do navegador, e o que você tiver no Alpine (`/home`, configurações, scripts).
 Confira que o backup abre em outro aparelho antes de seguir.
 
 > Arrependeu depois? Dá para voltar ao macOS a qualquer momento: veja **F7** no final.
@@ -79,7 +79,7 @@ diskutil eject /dev/disk2
 ### B1. Ligar pelo pendrive
 1. Desligue o Mac. Coloque o **pendrive** e o **carregador**.
 2. Ligue **segurando a tecla ⌥ (Option)** até aparecerem os ícones de disco.
-3. Escolha o ícone amarelo **EFI Boot** e aperte Enter.
+3. Escolha o **EFI Boot do pendrive**: o ícone **laranja/amarelo de disco externo** (USB). Se o disco tiver outro sistema (como o Alpine), pode aparecer outro "EFI Boot" com **ícone cinza**: esse é o disco interno, não escolha. Aperte Enter.
 4. No menu preto, escolha **Try or Install Xubuntu**.
 
 ### B2. Internet pelo celular
@@ -103,7 +103,7 @@ No canto superior direito deve aparecer o ícone de rede **com fio**.
 | Tipo de instalação | **Instalação interativa** |
 | Aplicativos | **Seleção padrão** |
 | Software adicional | ✅ **Instalar software de terceiros para placas gráficas e Wi-Fi**: **marque!** É o driver do Wi-Fi. ✅ Formatos de mídia (opcional) |
-| Como instalar | **Apagar o disco e instalar o Xubuntu**. Confirme que apaga tudo. Não precisa de criptografia. |
+| Como instalar | **Apagar o disco e instalar o Xubuntu**. Se ele perguntar qual disco, escolha o **SSD interno (~121 GB, "APPLE SSD")**, nunca o pendrive. Confirme que apaga tudo (macOS e Alpine). Não precisa de criptografia. |
 | Conta | Seu nome, nome do computador, **usuário em minúsculas** e uma senha que você **não vai esquecer** (o `sudo` pede ela) |
 | Fuso horário | **São Paulo** (ou o seu) |
 | Revisar | **Instalar** |
@@ -114,7 +114,7 @@ A instalação leva de 15 a 30 minutos.
 Clique em **Reiniciar agora**. Quando pedir, **tire o pendrive** e aperte Enter.
 **Guarde o pendrive.** Ele serve de reserva para o driver do Wi-Fi (veja F3).
 
-> Se o Mac não iniciar no Ubuntu sozinho, ligue segurando **⌥** e escolha **EFI Boot** (agora o do disco interno). Depois de entrar, o próximo boot costuma ir direto.
+> **Se o Mac não iniciar no Ubuntu sozinho** (aparece uma pasta com "?", ou ele só entra segurando ⌥): ele ainda está procurando o sistema antigo, que era o padrão. Faça o **reset da NVRAM**: desligue, ligue segurando **⌥ ⌘ P R** juntas por uns 20 segundos e solte. Ele passa a iniciar o Ubuntu sozinho. Para entrar uma vez sem o reset: segure **⌥** e escolha **EFI Boot** (agora o do disco interno).
 
 ---
 

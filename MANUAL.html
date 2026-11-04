@@ -276,7 +276,7 @@ html { scroll-behavior: smooth; }
 
   <article class="etapa" data-etapa="A1">
     <header><span class="codigo">A1</span><h3>Fazer backup</h3><label class="feito"><input type="checkbox" id="chk-A1"><span class="txt">feito</span></label></header>
-    <p>A instalação <strong>apaga o disco inteiro</strong>. Copie para a nuvem ou um HD externo: documentos, fotos, downloads, área de trabalho, favoritos e senhas do navegador.</p>
+    <p>A instalação <strong>apaga o disco inteiro</strong>: o macOS <strong>e o Alpine</strong>. Copie para a nuvem ou um HD externo: documentos, fotos, downloads, área de trabalho, favoritos e senhas do navegador, e o que você tiver no Alpine (<code class="inline">/home</code>, configurações, scripts).</p>
     <p class="nota">Confira se o backup abre em outro aparelho antes de seguir. Para voltar ao macOS depois, veja F7.</p>
   </article>
 
@@ -330,7 +330,7 @@ html { scroll-behavior: smooth; }
     <ol>
       <li>Desligue o Mac. Coloque o pendrive e o carregador.</li>
       <li>Ligue <strong>segurando</strong> <kbd>⌥</kbd> até aparecerem os ícones de disco.</li>
-      <li>Escolha o ícone amarelo <strong>EFI Boot</strong> e aperte <kbd>↩</kbd>.</li>
+      <li>Escolha o <strong>EFI Boot do pendrive</strong>: o ícone <strong>laranja/amarelo de disco externo</strong>. O Alpine pode aparecer como outro "EFI Boot" com <strong>ícone cinza</strong>: esse é o disco interno, não escolha. Aperte <kbd>↩</kbd>.</li>
       <li>No menu preto, escolha <strong>Try or Install Xubuntu</strong>.</li>
     </ol>
   </article>
@@ -359,7 +359,7 @@ html { scroll-behavior: smooth; }
         <tr><td>Tipo</td><td>Instalação interativa</td></tr>
         <tr><td>Aplicativos</td><td>Seleção padrão</td></tr>
         <tr><td>Software adicional</td><td><span class="marque">✓ Marque "Instalar software de terceiros para placas gráficas e Wi-Fi".</span> É o driver do Wi-Fi. Formatos de mídia: opcional.</td></tr>
-        <tr><td>Como instalar</td><td>Apagar o disco e instalar o Xubuntu. Confirme. Não precisa de criptografia.</td></tr>
+        <tr><td>Como instalar</td><td>Apagar o disco e instalar o Xubuntu. Se perguntar qual disco, escolha o <strong>SSD interno (~121 GB, "APPLE SSD")</strong>, nunca o pendrive. Confirme que apaga tudo (macOS e Alpine). Não precisa de criptografia.</td></tr>
         <tr><td>Conta</td><td>Nome, nome do computador, usuário em minúsculas e uma senha que você não vai esquecer (o <code class="inline">sudo</code> pede ela)</td></tr>
         <tr><td>Fuso horário</td><td>São Paulo, ou o seu</td></tr>
         <tr><td>Revisar</td><td>Instalar · leva de 15 a 30 minutos</td></tr>
@@ -370,7 +370,7 @@ html { scroll-behavior: smooth; }
   <article class="etapa" data-etapa="B4">
     <header><span class="codigo">B4</span><h3>Reiniciar</h3><label class="feito"><input type="checkbox" id="chk-B4"><span class="txt">feito</span></label></header>
     <p>Clique em <strong>Reiniciar agora</strong>. Quando pedir, tire o pendrive e aperte <kbd>↩</kbd>. <strong>Guarde o pendrive:</strong> ele tem o driver do Wi-Fi de reserva (F3).</p>
-    <p class="nota">Se o Mac não iniciar no Ubuntu sozinho, ligue segurando <kbd>⌥</kbd> e escolha EFI Boot (agora o do disco interno). Depois disso costuma ir direto.</p>
+    <p class="dica"><strong>Se o Mac não iniciar no Ubuntu sozinho</strong> (aparece uma pasta com "?", ou só entra segurando <kbd>⌥</kbd>): ele ainda procura o Alpine, que era o padrão. Faça o reset da NVRAM: desligue e ligue segurando <kbd>⌥</kbd> <kbd>⌘</kbd> <kbd>P</kbd> <kbd>R</kbd> por uns 20 segundos. Depois disso ele inicia o Ubuntu sozinho. Para entrar uma vez sem o reset: segure <kbd>⌥</kbd> e escolha EFI Boot (agora o do disco interno).</p>
   </article>
 </section>
 
