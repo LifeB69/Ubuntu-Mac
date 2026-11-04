@@ -169,6 +169,24 @@ h3 { font: 600 20px/1.25 var(--f-display); margin: 0; flex: 1; min-width: 0; tex
 }
 code.inline { font: 14px var(--f-mono); background: var(--bg); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
 
+/* ---------- Cartão de download ---------- */
+.baixar {
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; align-items: center;
+  border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--bg);
+}
+.baixar .nome { font: 600 16px/1.3 var(--f-display); min-width: 0; }
+.baixar .arq { font: 13px/1.4 var(--f-mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; grid-column: 1; }
+.baixar a.botao {
+  grid-row: 1 / span 2; grid-column: 2; text-decoration: none; white-space: nowrap;
+  font: 600 14px/1 var(--f-body); color: var(--panel); background: var(--accent);
+  padding: 10px 14px; border-radius: 7px;
+}
+.baixar a.botao:hover { filter: brightness(1.08); }
+@media (max-width: 520px) {
+  .baixar { grid-template-columns: 1fr; }
+  .baixar a.botao { grid-row: auto; grid-column: 1; justify-self: start; margin-top: 6px; }
+}
+
 /* ---------- Teclas ---------- */
 kbd {
   display: inline-block; min-width: 1.9em; text-align: center; font: 600 13px/1 var(--f-body);
@@ -217,6 +235,14 @@ footer.fim button {
   border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; cursor: pointer;
 }
 
+@media (max-width: 560px) {
+  .tabela table, .tabela tbody, .tabela tr, .tabela td { display: block; }
+  .tabela thead { display: none; }
+  .tabela tr { border-bottom: 1px solid var(--line); padding: 10px 12px; }
+  .tabela tr:last-child { border-bottom: 0; }
+  .tabela td { border: 0; padding: 0; }
+  .tabela td:first-child { white-space: normal; color: var(--accent); font: 600 13px/1.3 var(--f-mono); letter-spacing: .02em; margin-bottom: 4px; }
+}
 @media (max-width: 520px) {
   .progresso .trilho { display: none; }
   .etapa { padding: 14px 14px 16px; }
@@ -234,7 +260,7 @@ html { scroll-behavior: smooth; }
   <section class="capa">
     <div class="olho">Manual de instalação · Ubuntu-Mac</div>
     <h1>Ubuntu no MacBook Air</h1>
-    <p class="lead">Troque o macOS pelo Xubuntu 26.04 já configurado, com teclado de Mac, Claude Desktop e Claude Code. Marque cada etapa ao terminar: o progresso fica salvo neste aparelho.</p>
+    <p class="lead">Troque o macOS (e o Alpine) pelo Xubuntu 26.04.1 já configurado, com teclado de Mac, Claude Desktop e Claude Code. Marque cada etapa ao terminar: o progresso fica salvo neste aparelho.</p>
     <dl class="ficha">
       <div><dt>Máquina</dt><dd>MacBook Air 11" · 2015</dd></div>
       <div><dt>Sistema</dt><dd>Xubuntu 26.04.1 LTS</dd></div>
@@ -281,22 +307,16 @@ html { scroll-behavior: smooth; }
   </article>
 
   <article class="etapa" data-etapa="A2">
-    <header><span class="codigo">A2</span><h3>Repositório público ou privado</h3><label class="feito"><input type="checkbox" id="chk-A2"><span class="txt">feito</span></label></header>
-    <p>O comando da Parte C baixa os scripts do GitHub (<code class="inline">LifeB69/Ubuntu-Mac</code>). Escolha um caminho:</p>
-    <div class="dois">
-      <div><h4>Público (mais fácil)</h4><p>No GitHub: repositório → <strong>Settings → General → Danger Zone → Change visibility → Public</strong>. Não há senhas nem dados pessoais nele.</p></div>
-      <div><h4>Privado</h4><p>Sem problema. Na etapa C3 você baixa o ZIP pelo Firefox, já logado no GitHub.</p></div>
+    <header><span class="codigo">A2</span><h3>Baixar o Xubuntu</h3><label class="feito"><input type="checkbox" id="chk-A2"><span class="txt">feito</span></label></header>
+    <div class="baixar">
+      <span class="nome">Xubuntu 26.04.1 LTS · 64 bits</span>
+      <span class="arq">xubuntu-26.04.1-desktop-amd64.iso · 5,2 GB</span>
+      <a class="botao" href="https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso">Baixar</a>
     </div>
   </article>
 
   <article class="etapa" data-etapa="A3">
-    <header><span class="codigo">A3</span><h3>Baixar o Xubuntu</h3><label class="feito"><input type="checkbox" id="chk-A3"><span class="txt">feito</span></label></header>
-    <p>Arquivo de cerca de 5 GB:</p>
-    <p><a href="https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso">xubuntu-26.04.1-desktop-amd64.iso</a></p>
-  </article>
-
-  <article class="etapa" data-etapa="A4">
-    <header><span class="codigo">A4</span><h3>Conferir se o arquivo veio inteiro</h3><label class="feito"><input type="checkbox" id="chk-A4"><span class="txt">feito</span></label></header>
+    <header><span class="codigo">A3</span><h3>Conferir se o arquivo veio inteiro</h3><label class="feito"><input type="checkbox" id="chk-A3"><span class="txt">feito</span></label></header>
     <p>Abra o <strong>Terminal</strong> (<kbd>⌘</kbd> <kbd>Espaço</kbd> → "Terminal") e rode:</p>
     <div class="cmd"><div class="topo"><span class="onde">Terminal do macOS</span><button type="button">Copiar</button></div><pre><code>shasum -a 256 ~/Downloads/xubuntu-26.04.1-desktop-amd64.iso</code></pre></div>
     <p>O resultado tem que ser exatamente:</p>
@@ -304,15 +324,23 @@ html { scroll-behavior: smooth; }
     <p class="nota">Se for diferente, apague o arquivo e baixe de novo.</p>
   </article>
 
-  <article class="etapa" data-etapa="A5">
-    <header><span class="codigo">A5</span><h3>Gravar o pendrive</h3><label class="feito"><input type="checkbox" id="chk-A5"><span class="txt">feito</span></label></header>
+  <article class="etapa" data-etapa="A4">
+    <header><span class="codigo">A4</span><h3>Gravar o pendrive com o balenaEtcher</h3><label class="feito"><input type="checkbox" id="chk-A4"><span class="txt">feito</span></label></header>
+    <div class="aviso"><strong>Use a versão 2.1.8.</strong> A mais nova (2.1.9 em diante) não abre no macOS 12: pede o macOS 13. A 2.1.8 é a última que funciona no Monterey; o próprio instalador declara mínimo macOS 11.0.</div>
+    <div class="baixar">
+      <span class="nome">balenaEtcher 2.1.8 · Mac Intel</span>
+      <span class="arq">balenaEtcher-2.1.8-x64.dmg · 166 MB</span>
+      <a class="botao" href="https://github.com/balena-io/etcher/releases/download/v2.1.8/balenaEtcher-2.1.8-x64.dmg">Baixar</a>
+    </div>
     <ol>
-      <li>Instale o <a href="https://etcher.balena.io/">balenaEtcher</a>, versão para macOS. Ele exige macOS 11 ou mais novo; o Monterey (12) atende. Se o macOS bloquear: <strong>Preferências do Sistema → Segurança e Privacidade → Abrir Mesmo Assim</strong>.</li>
-      <li>No Etcher: <strong>Flash from file</strong> → escolha o <code class="inline">.iso</code> → <strong>Select target</strong> → escolha o <strong>pendrive</strong> (confira o tamanho) → <strong>Flash!</strong></li>
+      <li>Se já instalou uma versão mais nova, apague-a: <strong>Aplicativos → balenaEtcher → Mover para o Lixo</strong>.</li>
+      <li>Abra o <code class="inline">.dmg</code> e arraste o balenaEtcher para <strong>Aplicativos</strong>.</li>
+      <li>Abra o Etcher. Se o macOS perguntar sobre um app baixado da internet, clique em <strong>Abrir</strong>.</li>
+      <li><strong>Flash from file</strong> → escolha o <code class="inline">.iso</code> → <strong>Select target</strong> → escolha o <strong>pendrive</strong> (confira o tamanho) → <strong>Flash!</strong></li>
       <li>Digite a senha do Mac e espere o "Validating" terminar. Se o macOS disser que "o disco não pode ser lido", clique em <strong>Ejetar</strong>: é normal.</li>
     </ol>
     <details class="alt"><summary>Sem o Etcher, pelo Terminal</summary><div>
-      <div class="cmd"><div class="topo"><span class="onde">1 · achar o pendrive pelo tamanho</span><button type="button">Copiar</button></div><pre><code>diskutil list</code></pre></div>
+      <div class="cmd"><div class="topo"><span class="onde">1 · achar o pendrive: "(external, physical)"</span><button type="button">Copiar</button></div><pre><code>diskutil list</code></pre></div>
       <p class="nota">Nos comandos abaixo, troque <code class="inline">disk2</code> pelo número do seu pendrive. <strong>Errar o número apaga o disco errado.</strong></p>
       <div class="cmd"><div class="topo"><span class="onde">2 · desmontar</span><button type="button">Copiar</button></div><pre><code>diskutil unmountDisk /dev/disk2</code></pre></div>
       <div class="cmd"><div class="topo"><span class="onde">3 · gravar (5 a 15 min · Ctrl+T mostra o progresso)</span><button type="button">Copiar</button></div><pre><code>sudo dd if=$HOME/Downloads/xubuntu-26.04.1-desktop-amd64.iso of=/dev/rdisk2 bs=4m</code></pre></div>
@@ -331,45 +359,51 @@ html { scroll-behavior: smooth; }
       <li>Desligue o Mac. Coloque o pendrive e o carregador.</li>
       <li>Ligue <strong>segurando</strong> <kbd>⌥</kbd> até aparecerem os ícones de disco.</li>
       <li>Escolha o <strong>EFI Boot do pendrive</strong>: o ícone <strong>laranja/amarelo de disco externo</strong>. O Alpine pode aparecer como outro "EFI Boot" com <strong>ícone cinza</strong>: esse é o disco interno, não escolha. Aperte <kbd>↩</kbd>.</li>
-      <li>No menu preto, escolha <strong>Try or Install Xubuntu</strong>.</li>
+      <li>No menu preto, escolha <strong>Try or Install Xubuntu</strong>. Se não escolher, ele entra sozinho em 30 segundos.</li>
     </ol>
+    <p class="nota">Tela preta ou travada no logo? Reinicie e, nesse menu, escolha <strong>Xubuntu (safe graphics)</strong>.</p>
   </article>
 
   <article class="etapa" data-etapa="B2">
     <header><span class="codigo">B2</span><h3>Internet pelo celular</h3><label class="feito"><input type="checkbox" id="chk-B2"><span class="txt">feito</span></label></header>
     <p>O Wi-Fi do Mac <strong>ainda não funciona</strong> nesta etapa, porque falta o driver. Use o cabo:</p>
     <div class="dois">
-      <div><h4>Android</h4><p>Conecte o cabo → <strong>Configurações → Rede e Internet → Ponto de acesso → Ancoragem USB</strong>.</p></div>
-      <div><h4>iPhone</h4><p>Conecte o cabo → toque em <strong>Confiar</strong> → <strong>Ajustes → Acesso Pessoal → Permitir que outros acessem</strong>.</p></div>
+      <div><h4>iPhone</h4><p>Conecte o cabo → toque em <strong>Confiar</strong> → <strong>Ajustes → Acesso Pessoal → Permitir Acesso a Outros</strong>.</p></div>
+      <div><h4>Android Samsung</h4><p>Conecte o cabo → <strong>Configurações → Conexões → Roteador Wi-Fi e ancoragem → Ancoragem via USB</strong>.</p></div>
+      <div><h4>Outros Android</h4><p>Motorola, Pixel e outros: <strong>Configurações → Rede e Internet → Ponto de acesso e tethering → Tethering USB</strong>. Não achou? Busque "ancoragem" ou "tethering" nas Configurações.</p></div>
     </div>
     <p class="nota">No canto superior direito deve aparecer o ícone de rede com fio.</p>
-    <p class="dica"><strong>Dá para testar antes de apagar:</strong> escolha "Experimentar o Xubuntu" e confira teclado, touchpad, som e tela. Para instalar depois, use o ícone "Instalar Xubuntu" na área de trabalho.</p>
+    
   </article>
 
   <article class="etapa" data-etapa="B3">
     <header><span class="codigo">B3</span><h3>O instalador, tela por tela</h3><label class="feito"><input type="checkbox" id="chk-B3"><span class="txt">feito</span></label></header>
+    <p class="nota">Nomes das telas como aparecem no instalador em português, conferidos na própria imagem do Xubuntu 26.04.1.</p>
     <div class="tabela"><table>
       <thead><tr><th>Tela</th><th>O que escolher</th></tr></thead>
       <tbody>
-        <tr><td>Idioma</td><td>Português (Brasil)</td></tr>
+        <tr><td>Bem-vindo</td><td>Português (Brasil)</td></tr>
         <tr><td>Acessibilidade</td><td>Próximo</td></tr>
-        <tr><td>Teclado</td><td>English (US) / English (US). O script ajusta os acentos depois.</td></tr>
-        <tr><td>Internet</td><td>Usar conexão com fio (é o celular)</td></tr>
-        <tr><td>Atualizar instalador</td><td>Se aparecer, pode pular</td></tr>
-        <tr><td>Tipo</td><td>Instalação interativa</td></tr>
-        <tr><td>Aplicativos</td><td>Seleção padrão</td></tr>
-        <tr><td>Software adicional</td><td><span class="marque">✓ Marque "Instalar software de terceiros para placas gráficas e Wi-Fi".</span> É o driver do Wi-Fi. Formatos de mídia: opcional.</td></tr>
-        <tr><td>Como instalar</td><td>Apagar o disco e instalar o Xubuntu. Se perguntar qual disco, escolha o <strong>SSD interno (~121 GB, "APPLE SSD")</strong>, nunca o pendrive. Confirme que apaga tudo (macOS e Alpine). Não precisa de criptografia.</td></tr>
-        <tr><td>Conta</td><td>Nome, nome do computador, usuário em minúsculas e uma senha que você não vai esquecer (o <code class="inline">sudo</code> pede ela)</td></tr>
+        <tr><td>Layout do teclado</td><td>English (US) / English (US). O script ajusta os acentos depois.</td></tr>
+        <tr><td>Conecte-se a uma rede</td><td>Usar conexão via cabo (é o celular)</td></tr>
+        <tr><td>Atualização disponível</td><td>Só aparece às vezes. Pode seguir sem atualizar.</td></tr>
+        <tr><td>Experimentar ou instalar</td><td><strong>Instalar o Xubuntu</strong>. Para testar teclado, touchpad e som antes, escolha "Experimentar" e depois use o ícone "Instalar Xubuntu" na área de trabalho.</td></tr>
+        <tr><td>Tipo de instalação</td><td>Instalação interativa</td></tr>
+        <tr><td>Aplicativos</td><td><strong>Xubuntu Desktop</strong> (o padrão). Não escolha "Xubuntu Minimal".</td></tr>
+        <tr><td>Otimize seu computador</td><td><span class="marque">✓ Marque "Instalar software de terceiros para gráficos e hardware Wi-Fi".</span> É o driver do Wi-Fi. Formatos de mídia adicionais: opcional.</td></tr>
+        <tr><td>Como você deseja instalar?</td><td>Ele avisa que achou "múltiplos sistemas operacionais". Escolha <strong>Apagar o disco e instalar o Xubuntu</strong>; não use "juntamente com" nem "Particionamento manual".</td></tr>
+        <tr><td>Escolha onde instalar</td><td>Em <strong>Selecione o disco</strong>: o <strong>SSD interno, APPLE SSD</strong> (121 GB no modelo de 128 GB). <strong>Nunca o pendrive.</strong> Criptografia: não precisa.</td></tr>
+        <tr><td>Configurar sua conta</td><td>Seu nome · Nome do seu computador · nome de usuário em minúsculas, sem espaço · uma senha que você não vai esquecer (o <code class="inline">sudo</code> pede ela) · deixe "Solicitar minha senha para entrar" marcado</td></tr>
         <tr><td>Fuso horário</td><td>São Paulo, ou o seu</td></tr>
-        <tr><td>Revisar</td><td>Instalar · leva de 15 a 30 minutos</td></tr>
+        <tr><td>Pronto para instalar</td><td>Confira "Apagado" no APPLE SSD → <strong>Instalar</strong> · 15 a 30 minutos</td></tr>
+        <tr><td>Instalação concluída</td><td>Reiniciar agora</td></tr>
       </tbody>
     </table></div>
   </article>
 
   <article class="etapa" data-etapa="B4">
     <header><span class="codigo">B4</span><h3>Reiniciar</h3><label class="feito"><input type="checkbox" id="chk-B4"><span class="txt">feito</span></label></header>
-    <p>Clique em <strong>Reiniciar agora</strong>. Quando pedir, tire o pendrive e aperte <kbd>↩</kbd>. <strong>Guarde o pendrive:</strong> ele tem o driver do Wi-Fi de reserva (F3).</p>
+    <p>Quando pedir, tire o pendrive e aperte <kbd>↩</kbd>. <strong>Guarde o pendrive:</strong> ele tem o driver do Wi-Fi de reserva (F3).</p>
     <p class="dica"><strong>Se o Mac não iniciar no Ubuntu sozinho</strong> (aparece uma pasta com "?", ou só entra segurando <kbd>⌥</kbd>): ele ainda procura o Alpine, que era o padrão. Faça o reset da NVRAM: desligue e ligue segurando <kbd>⌥</kbd> <kbd>⌘</kbd> <kbd>P</kbd> <kbd>R</kbd> por uns 20 segundos. Depois disso ele inicia o Ubuntu sozinho. Para entrar uma vez sem o reset: segure <kbd>⌥</kbd> e escolha EFI Boot (agora o do disco interno).</p>
   </article>
 </section>
@@ -390,15 +424,20 @@ html { scroll-behavior: smooth; }
   <article class="etapa" data-etapa="C2">
     <header><span class="codigo">C2</span><h3>Abrir o Terminal</h3><label class="feito"><input type="checkbox" id="chk-C2"><span class="txt">feito</span></label></header>
     <p>Aperte <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>T</kbd>. No Mac são as teclas <kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>T</kbd>.</p>
-    <p class="nota">Até o script rodar, as teclas são as do Linux: o <kbd>⌘</kbd> ainda não funciona como no Mac. Para copiar o comando abaixo, abra este manual no Firefox do próprio Mac, copie com <kbd>Ctrl</kbd> <kbd>C</kbd> e cole no Terminal com <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>V</kbd>.</p>
+    <p class="nota">Até o script rodar, as teclas são as do Linux: o <kbd>⌘</kbd> ainda não funciona como no Mac. Para copiar o comando abaixo, abra este manual no Firefox do próprio Mac (github.com/LifeB69/Ubuntu-Mac → MANUAL.html), copie com <kbd>⌃</kbd> <kbd>C</kbd> e cole no Terminal com <kbd>⌃</kbd> <kbd>⇧</kbd> <kbd>V</kbd>.</p>
   </article>
 
   <article class="etapa" data-etapa="C3">
     <header><span class="codigo">C3</span><h3>Rodar o comando</h3><label class="feito"><input type="checkbox" id="chk-C3"><span class="txt">feito</span></label></header>
-    <p><strong>Repositório público:</strong></p>
     <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash</code></pre></div>
-    <p><strong>Repositório privado:</strong> no Firefox, entre no GitHub → <strong>LifeB69/Ubuntu-Mac</strong> → <strong>Code → Download ZIP</strong>. Depois:</p>
-    <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>cd ~/Downloads &amp;&amp; unzip -oq Ubuntu-Mac-*.zip &amp;&amp; bash Ubuntu-Mac-*/comecar.sh</code></pre></div>
+    <details class="alt"><summary>Se esse comando não funcionar: pelo ZIP</summary><div>
+      <div class="baixar">
+        <span class="nome">Projeto Ubuntu-Mac</span>
+        <span class="arq">Ubuntu-Mac-main.zip · vai para Downloads</span>
+        <a class="botao" href="https://github.com/LifeB69/Ubuntu-Mac/archive/refs/heads/main.zip">Baixar</a>
+      </div>
+      <div class="cmd"><div class="topo"><span class="onde">Terminal do Xubuntu</span><button type="button">Copiar</button></div><pre><code>cd ~/Downloads &amp;&amp; unzip -oq Ubuntu-Mac-*.zip &amp;&amp; bash Ubuntu-Mac-*/comecar.sh</code></pre></div>
+    </div></details>
   </article>
 
   <article class="etapa" data-etapa="C4">
@@ -443,8 +482,8 @@ html { scroll-behavior: smooth; }
   <article class="etapa" data-etapa="D4">
     <header><span class="codigo">D4</span><h3>Opcional: o Claude usando o navegador</h3><label class="feito"><input type="checkbox" id="chk-D4"><span class="txt">feito</span></label></header>
     <ol>
-      <li>Abra o Google Chrome (Menu → Internet).</li>
-      <li>Instale a extensão Claude pela Chrome Web Store e entre com a mesma conta.</li>
+      <li>Abra o Google Chrome (Menu → Internet). O script já instalou.</li>
+      <li>Instale a extensão oficial e entre com a mesma conta: <a href="https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn">Claude na Chrome Web Store</a>.</li>
       <li>No Claude Code, digite <code class="inline">/chrome</code>.</li>
     </ol>
     <p class="nota">No Firefox essa extensão não existe; ele continua sendo o navegador do dia a dia.</p>
@@ -481,12 +520,12 @@ html { scroll-behavior: smooth; }
 <section class="parte" id="parte-f">
   <header><div class="letra">Parte F</div><h2>Se algo der errado</h2></header>
 
-  <details class="prob"><summary><span class="codigo">F1</span>Segurando ⌥, o "EFI Boot" não aparece</summary><div class="corpo">
-    <p>Grave o pendrive de novo (A5), use a outra porta USB e segure <kbd>⌥</kbd> antes do som de inicialização.</p>
+  <details class="prob"><summary><span class="codigo">F1</span>Segurando ⌥, o "EFI Boot" do pendrive não aparece</summary><div class="corpo">
+    <p>Grave o pendrive de novo (A4), use a outra porta USB e segure <kbd>⌥</kbd> antes do som de inicialização.</p>
   </div></details>
 
   <details class="prob"><summary><span class="codigo">F2</span>Sem internet no instalador</summary><div class="corpo">
-    <p>Android: desligue e ligue a Ancoragem USB. iPhone: desconecte, reconecte, toque em Confiar e deixe a tela do Acesso Pessoal aberta. Se não der, instale sem internet: o driver do Wi-Fi vem no pendrive.</p>
+    <p>iPhone: desconecte, reconecte, toque em Confiar e deixe a tela do Acesso Pessoal aberta. Android: desligue e ligue a ancoragem/tethering USB. Se não der, escolha "Não quero conectar à internet neste momento" e instale sem internet: o driver do Wi-Fi vem no pendrive.</p>
   </div></details>
 
   <details class="prob"><summary><span class="codigo">F3</span>Depois de instalar, o Wi-Fi não aparece</summary><div class="corpo">
@@ -497,7 +536,7 @@ html { scroll-behavior: smooth; }
   </div></details>
 
   <details class="prob"><summary><span class="codigo">F4</span>"Não consegui baixar o projeto do GitHub"</summary><div class="corpo">
-    <p>O repositório está privado. Use o caminho do ZIP (C3, segunda opção).</p>
+    <p>Confira a internet. Se continuar, use o caminho do ZIP (C3, "Se esse comando não funcionar").</p>
   </div></details>
 
   <details class="prob"><summary><span class="codigo">F5</span>"O Ubuntu-Mac já está rodando em outro terminal"</summary><div class="corpo">

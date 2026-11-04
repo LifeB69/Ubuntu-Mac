@@ -16,17 +16,13 @@ Você instala o sistema, roda **um comando**, reinicia e está pronto.
 📋 **Siga o [PASSO-A-PASSO.md](PASSO-A-PASSO.md)**, que vai do backup no macOS até o Claude funcionando, com solução de problemas. A versão visual, com etapas marcáveis e botões de copiar, é o [MANUAL.html](MANUAL.html).
 
 Resumo:
-1. No macOS: backup → baixar o [Xubuntu 26.04.1](https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso) → gravar no pendrive.
-2. Ligar segurando **⌥** → **EFI Boot** → instalar com ✅ "software de terceiros" (é o driver do Wi-Fi). Internet pelo celular no cabo.
+1. No macOS: backup → baixar o [Xubuntu 26.04.1](https://cdimage.ubuntu.com/xubuntu/releases/26.04/release/xubuntu-26.04.1-desktop-amd64.iso) → gravar no pendrive com o [balenaEtcher 2.1.8](https://github.com/balena-io/etcher/releases/download/v2.1.8/balenaEtcher-2.1.8-x64.dmg) (a versão mais nova exige macOS 13).
+2. Ligar segurando **⌥** → **EFI Boot** do pendrive → instalar o **Xubuntu Desktop** com ✅ "software de terceiros" (é o driver do Wi-Fi), apagando o disco inteiro. Internet pelo celular no cabo.
 3. No Xubuntu, no Terminal (**Ctrl+Alt+T**):
-   - repositório **público**:
-     ```bash
-     wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash
-     ```
-   - repositório **privado**: baixe o ZIP pelo Firefox (Code → Download ZIP) e rode:
-     ```bash
-     cd ~/Downloads && unzip -oq Ubuntu-Mac-*.zip && bash Ubuntu-Mac-*/comecar.sh
-     ```
+   ```bash
+   wget -qO- https://raw.githubusercontent.com/LifeB69/Ubuntu-Mac/main/comecar.sh | bash
+   ```
+   (alternativa: baixar o [ZIP](https://github.com/LifeB69/Ubuntu-Mac/archive/refs/heads/main.zip) e rodar `cd ~/Downloads && unzip -oq Ubuntu-Mac-*.zip && bash Ubuntu-Mac-*/comecar.sh`)
 4. Reiniciar e conferir:
    ```bash
    ubuntu-mac --verificar
