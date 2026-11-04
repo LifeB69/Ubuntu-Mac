@@ -58,20 +58,39 @@ passo "Sem sombra embaixo da dock" xfset xfwm4 /general/show_dock_shadow bool fa
 # O Xubuntu vem com 1 só área de trabalho; os gestos de 3 dedos ← → precisam de mais.
 passo "4 áreas de trabalho (para os gestos de 3 dedos)" xfset xfwm4 /general/workspace_count int 4
 
-# ---------- Atalhos ----------
-# ⌘ sozinho manda "Super"; ⌘+Espaço manda "Super+Espaço" (ver arquivos/keyd-mac.conf).
-if command -v xfce4-popup-whiskermenu >/dev/null; then
-  passo "Atalho: ⌘ abre o menu" \
-    xfset xfce4-keyboard-shortcuts "/commands/custom/Super_L" string xfce4-popup-whiskermenu
-  passo "Atalho: ⌘+Espaço abre o menu (busca)" \
-    xfset xfce4-keyboard-shortcuts "/commands/custom/<Super>space" string xfce4-popup-whiskermenu
+# ---------- Barra de cima no estilo Mac ----------
+# (Os atalhos de teclado ficam no módulo 05.)
+plugin_id() { # plugin_id tipo -> id do primeiro plugin desse tipo no painel
+  xfconf-query -c xfce4-panel -lv 2>/dev/null |
+    awk -v t="$1" '$1 ~ "^/plugins/plugin-[0-9]+$" && $2 == t {sub("/plugins/plugin-", "", $1); print $1; exit}'
+}
+relogio_mac() {
+  local id; id="$(plugin_id clock)"
+  [[ -n "$id" ]] || { echo "Relógio não encontrado no painel"; return 1; }
+  # Como a barra do Mac: "qua 4 nov  07:04"
+  xfconf-query -c xfce4-panel -p "/plugins/plugin-$id/digital-layout" -n -t int -s 3 &&
+    xfconf-query -c xfce4-panel -p "/plugins/plugin-$id/digital-time-format" -n -t string -s " %a %-d %b  %H:%M "
+}
+passo "Relógio como na barra do Mac (dia da semana, data e hora)" relogio_mac
+
+# A lista de janelas na barra de cima repete o que a dock já mostra (o Mac não
+# tem isso) e ocupa espaço numa tela de 11". Os apps abertos aparecem na dock.
+tirar_lista_janelas() {
+  local id ids novos=() x
+  id="$(plugin_id tasklist)"
+  [[ -n "$id" ]] || { echo "Lista de janelas já não está no painel"; return 0; }
+  mapfile -t ids < <(xfconf-query -c xfce4-panel -p /panels/panel-1/plugin-ids 2>/dev/null | grep -E '^[0-9]+$')
+  for x in "${ids[@]}"; do [[ "$x" != "$id" ]] && novos+=(-t int -s "$x"); done
+  ((${#novos[@]})) || return 1
+  xfconf-query -c xfce4-panel -p /panels/panel-1/plugin-ids "${novos[@]}" &&
+    xfconf-query -c xfce4-panel -p "/plugins/plugin-$id" -r -R || return 1
+  # O painel só aplica a remoção quando reinicia.
+  (setsid xfce4-panel -r >/dev/null 2>&1 &)
+  sleep 3
+}
+if command -v plank >/dev/null; then
+  passo "Tirar a lista de janelas da barra de cima (fica na dock)" tirar_lista_janelas
 fi
-passo "Atalho: Ctrl+Alt+T abre o terminal" \
-  xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Alt>t" string "xfce4-terminal"
-passo "Atalho: ⌘+Shift+3 captura a tela inteira" \
-  xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Shift>numbersign" string "xfce4-screenshooter -f"
-passo "Atalho: ⌘+Shift+4 captura uma área da tela" \
-  xfset xfce4-keyboard-shortcuts "/commands/custom/<Primary><Shift>dollar" string "xfce4-screenshooter -r"
 
 # ---------- Dock (Plank) ----------
 if ! command -v plank >/dev/null; then
@@ -107,7 +126,9 @@ configurar_dock() {
   local lista; lista="[$(IFS=,; echo "${itens[*]}")]"
   local base=/net/launchpad/plank/docks/dock1
   dconf write $base/dock-items "$lista"
-  dconf write $base/theme "'Transparent'"
+  # "Gtk+": fundo escuro arredondado como a dock do macOS; funciona com ou sem
+  # composição de janelas (o "Transparent" deixa os ícones soltos, sem fundo).
+  dconf write $base/theme "'Gtk+'"
   dconf write $base/hide-mode "'window-dodge'"
   dconf write $base/icon-size 40
   dconf write $base/zoom-enabled true

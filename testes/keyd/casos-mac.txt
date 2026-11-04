@@ -1,0 +1,44 @@
+# nome | teclas apertadas (separadas por ;)   — modo OPTION_ESQUERDO=mac (padrão)
+cmd-c-copiar|leftmeta down;c down;c up;leftmeta up|+leftcontrol +insert -insert -leftcontrol
+cmd-v-colar|leftmeta down;v down;v up;leftmeta up|+leftcontrol +leftshift -leftcontrol +insert -insert -leftshift +leftcontrol -leftcontrol
+cmd-x-recortar|leftmeta down;x down;x up;leftmeta up|+leftcontrol +leftshift -leftcontrol +delete -delete -leftshift +leftcontrol -leftcontrol
+cmd-shift-v-colar-sem-formato|leftmeta down;leftshift down;v down;v up;leftshift up;leftmeta up|+leftcontrol +leftshift +v -v -leftshift -leftcontrol
+cmd-z-desfazer|leftmeta down;z down;z up;leftmeta up|+leftcontrol +z -z -leftcontrol
+cmd-shift-z-refazer|leftmeta down;leftshift down;z down;z up;leftshift up;leftmeta up|+leftcontrol +leftshift +z -z -leftshift -leftcontrol
+cmd-q-fechar-app|leftmeta down;q down;q up;leftmeta up|+leftcontrol +leftalt -leftcontrol +f4 -f4 -leftalt +leftcontrol -leftcontrol
+cmd-h-esconder|leftmeta down;h down;h up;leftmeta up|+leftcontrol +leftalt -leftcontrol +f9 -f9 -leftalt +leftcontrol -leftcontrol
+cmd-tab-tab-trocar-app|leftmeta down;tab down;tab up;tab down;tab up;leftmeta up|+leftcontrol +leftalt -leftcontrol +tab -tab +tab -tab -leftalt
+cmd-tab-shift-tab-voltar|leftmeta down;tab down;tab up;leftshift down;tab down;tab up;leftshift up;leftmeta up|+leftcontrol +leftalt -leftcontrol +tab -tab +leftshift +tab -tab -leftshift -leftalt
+cmd-tab-crase-voltar|leftmeta down;tab down;tab up;` down;` up;leftmeta up|+leftcontrol +leftalt -leftcontrol +tab -tab +leftshift +tab -tab -leftshift -leftalt
+cmd-crase-mesmo-app|leftmeta down;` down;` up;leftmeta up|+leftcontrol +leftmeta -leftcontrol +tab -tab -leftmeta +leftcontrol -leftcontrol
+cmd-espaco-busca|leftmeta down;space down;space up;leftmeta up|+leftcontrol +leftmeta -leftcontrol +space -space -leftmeta +leftcontrol -leftcontrol
+cmd-esquerda-inicio-linha|leftmeta down;left down;left up;leftmeta up|+leftcontrol -leftcontrol +home -home +leftcontrol -leftcontrol
+cmd-shift-esquerda-selecionar|leftmeta down;leftshift down;left down;left up;leftshift up;leftmeta up|+leftcontrol +leftshift -leftcontrol +home -home +leftcontrol -leftshift -leftcontrol
+cmd-backspace-apagar-linha|leftmeta down;backspace down;backspace up;leftmeta up|+leftcontrol -leftcontrol +leftshift +home -home -leftshift +backspace -backspace +leftcontrol -leftcontrol
+cmd-colchete-voltar|leftmeta down;[ down;[ up;leftmeta up|+leftcontrol +leftalt -leftcontrol +left -left -leftalt +leftcontrol -leftcontrol
+cmd-shift-colchete-proxima-aba|leftmeta down;leftshift down;] down;] up;leftshift up;leftmeta up|+leftcontrol +leftshift -leftshift +pagedown -pagedown +leftshift -leftshift -leftcontrol
+cmd-shift-ponto-ocultos|leftmeta down;leftshift down;. down;. up;leftshift up;leftmeta up|+leftcontrol +leftshift -leftshift +h -h +leftshift -leftshift -leftcontrol
+cmd-shift-4-captura|leftmeta down;leftshift down;4 down;4 up;leftshift up;leftmeta up|+leftcontrol +leftshift +4 -4 -leftshift -leftcontrol
+cmd-f3-mostrar-mesa|leftmeta down;scale down;scale up;leftmeta up|+leftcontrol +leftmeta -leftcontrol +d -d -leftmeta +leftcontrol -leftcontrol
+cmd-alt-i-devtools|leftmeta down;leftalt down;i down;i up;leftalt up;leftmeta up|+leftcontrol +leftalt -leftalt +leftshift +i -i +leftalt -leftshift -leftalt -leftcontrol
+cmd-alt-esc-forcar-encerrar|leftmeta down;leftalt down;esc down;esc up;leftalt up;leftmeta up|+leftcontrol +leftalt +esc -esc -leftalt -leftcontrol
+ctrl-c-interromper|leftcontrol down;c down;c up;leftcontrol up|+leftcontrol +c -c -leftcontrol
+ctrl-esquerda-area-de-trabalho|leftcontrol down;left down;left up;leftcontrol up|+leftcontrol +leftalt +left -left -leftalt -leftcontrol
+ctrl-cima-todas-janelas|leftcontrol down;up down;up up;leftcontrol up|+leftcontrol -leftcontrol +scale -scale +leftcontrol -leftcontrol
+ctrl-cmd-q-bloquear|leftcontrol down;leftmeta down;q down;q up;leftmeta up;leftcontrol up|+leftcontrol +leftmeta -leftcontrol +l -l -leftmeta +leftcontrol -leftcontrol
+ctrl-cmd-f-tela-cheia|leftcontrol down;leftmeta down;f down;f up;leftmeta up;leftcontrol up|+leftcontrol +leftalt -leftcontrol +f11 -f11 -leftalt +leftcontrol -leftcontrol
+ctrl-alt-t-terminal|leftcontrol down;leftalt down;t down;t up;leftalt up;leftcontrol up|+leftcontrol +leftalt +t -t -leftalt -leftcontrol
+ctrl-alt-delete|leftcontrol down;leftalt down;delete down;delete up;leftalt up;leftcontrol up|+leftcontrol +leftalt +delete -delete -leftalt -leftcontrol
+opt-e-a-agudo|leftalt down;e down;e up;leftalt up;a down;a up|+leftalt +leftcontrol -leftalt -leftcontrol +rightalt +e -e +leftalt -rightalt +leftcontrol -leftalt -leftcontrol +a -a
+opt-crase-a-grave|leftalt down;` down;` up;leftalt up;a down;a up|+leftalt +leftcontrol -leftalt -leftcontrol +rightalt +` -` +leftalt -rightalt +leftcontrol -leftalt -leftcontrol +a -a
+opt-shift-c-cedilha-maiusculo|leftalt down;leftshift down;c down;c up;leftshift up;leftalt up|+leftalt +leftshift -leftalt +rightalt +c -c +leftalt -rightalt -leftshift +leftcontrol -leftalt -leftcontrol
+opt-esquerda-palavra|leftalt down;left down;left up;leftalt up|+leftalt +leftcontrol -leftalt -leftcontrol +leftcontrol +left -left +leftalt -leftcontrol +leftcontrol -leftalt -leftcontrol
+opt-shift-direita-selecionar-palavra|leftalt down;leftshift down;right down;right up;leftshift up;leftalt up|+leftalt +leftshift -leftalt +leftcontrol +right -right +leftalt -leftcontrol -leftshift +leftcontrol -leftalt -leftcontrol
+opt-backspace-apagar-palavra|leftalt down;backspace down;backspace up;leftalt up|+leftalt +leftcontrol -leftalt -leftcontrol +leftcontrol +backspace -backspace +leftalt -leftcontrol +leftcontrol -leftalt -leftcontrol
+opt-tab|leftalt down;tab down;tab up;leftalt up|+leftalt +tab -tab -leftalt
+opt-f4|leftalt down;f4 down;f4 up;leftalt up|+leftalt +f4 -f4 -leftalt
+opt-enter-nova-linha-claude-code|leftalt down;enter down;enter up;leftalt up|+leftalt +enter -enter -leftalt
+optdir-e-agudo|rightalt down;e down;e up;rightalt up|+rightalt +e -e -rightalt
+optdir-esquerda-palavra|rightalt down;left down;left up;rightalt up|+rightalt +leftcontrol -rightalt -leftcontrol +leftcontrol +left -left +rightalt -leftcontrol +leftcontrol -rightalt -leftcontrol
+f3-todas-janelas|scale down;scale up|+scale -scale
+shift-a-normal|leftshift down;a down;a up;leftshift up|+leftshift +a -a -leftshift

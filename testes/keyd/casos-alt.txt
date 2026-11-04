@@ -1,0 +1,7 @@
+# modo OPTION_ESQUERDO=alt: o ⌥ esquerdo é Alt (o direito continua digitando acentos)
+alt-e-continua-alt|leftalt down;e down;e up;leftalt up|+leftalt +e -e -leftalt
+alt-esquerda-palavra|leftalt down;left down;left up;leftalt up|+leftalt +leftcontrol -leftalt -leftcontrol +leftcontrol +left -left +leftalt -leftcontrol +leftcontrol -leftalt -leftcontrol
+ctrl-alt-t-terminal|leftcontrol down;leftalt down;t down;t up;leftalt up;leftcontrol up|+leftcontrol +leftalt +t -t -leftalt -leftcontrol
+cmd-alt-i-devtools|leftmeta down;leftalt down;i down;i up;leftalt up;leftmeta up|+leftcontrol +leftalt -leftalt +leftshift +i -i +leftalt -leftshift -leftalt -leftcontrol
+optdir-e-agudo|rightalt down;e down;e up;rightalt up|+rightalt +e -e -rightalt
+cmd-c-copiar|leftmeta down;c down;c up;leftmeta up|+leftcontrol +insert -insert -leftcontrol
