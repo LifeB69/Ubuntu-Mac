@@ -115,7 +115,8 @@ Os nomes abaixo são os do instalador em português, conferidos na própria imag
 | **Aplicativos** | **Xubuntu Desktop** (o padrão). **Não** escolha "Xubuntu Minimal". |
 | **Otimize seu computador** | ✅ **Instalar software de terceiros para gráficos e hardware Wi-Fi**: **marque!** É o driver do Wi-Fi. ✅ Formatos de mídia adicionais: opcional. |
 | **Como você deseja instalar o Xubuntu?** (ele avisa que encontrou "múltiplos sistemas operacionais") | **Apagar o disco e instalar o Xubuntu**. Não use "Instale o Xubuntu juntamente com…" nem "Particionamento manual". |
-| **Escolha onde instalar o Xubuntu** | Em **Selecione o disco**, escolha o **SSD interno: APPLE SSD** (121 GB no modelo de 128 GB). **Nunca o pendrive.** Criptografia: não precisa. |
+| **Escolha onde instalar o Xubuntu** | Em **Selecione o disco**, escolha o **SSD interno: APPLE SSD** (121 GB no modelo de 128 GB). **Nunca o pendrive.** |
+| **Criptografia e sistema de arquivos** | **Sem criptografia** (já vem marcado) → Próximo. Não precisa abrir as opções avançadas. |
 | **Configurar sua conta** | Seu nome · Nome do seu computador · **Escolha um nome de usuário** (minúsculas, sem espaço) · **Escolha uma senha** que você não vai esquecer (o `sudo` pede ela) · deixe **Solicitar minha senha para entrar** marcado |
 | **Selecione seu fuso horário** | **São Paulo** (ou o seu) |
 | **Pronto para instalar** | Confira que diz **Apagado** para o disco APPLE SSD → **Instalar**. Leva de 15 a 30 minutos. |
