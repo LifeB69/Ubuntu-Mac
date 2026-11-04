@@ -5,11 +5,11 @@
 # com o driver proprietário "wl" (pacote broadcom-sta-dkms). O próprio pendrive
 # do Xubuntu 26.04.1 já traz esse pacote em pool/restricted/b/broadcom-sta/.
 
-if ! lspci -nn | grep -qi '14e4:43a0'; then
+if ! lspci -nn | contem -i '14e4:43a0'; then
   aviso "Chip BCM4360 não encontrado (lspci). Seguindo mesmo assim."
 fi
 
-wl_funcionando() { lsmod | grep -q '^wl ' && nmcli -t -f TYPE device 2>/dev/null | grep -qx wifi; }
+wl_funcionando() { lsmod | contem '^wl ' && nmcli -t -f TYPE device 2>/dev/null | contem -x wifi; }
 
 if wl_funcionando && pacote_instalado broadcom-sta-dkms; then
   pular "Driver Wi-Fi" "já instalado e funcionando"

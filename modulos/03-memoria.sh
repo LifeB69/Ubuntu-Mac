@@ -23,7 +23,7 @@ vm.vfs_cache_pressure = 50
 vm.dirty_background_ratio = 5
 vm.dirty_ratio = 10
 CONF
-passo "Aplicar ajustes do kernel" sudo sysctl --system
+passo "Aplicar ajustes do kernel" sudo sysctl -p /etc/sysctl.d/90-ubuntu-mac-memoria.conf
 passo "Ativar zram" ativar_servico zramswap.service
 
 # earlyoom: se a memória acabar, fecha o programa mais pesado em vez de travar tudo.

@@ -50,7 +50,7 @@ passo "Configurar gestos" install -D -m 644 "$REPO/arquivos/libinput-gestures.co
 passo "Permitir leitura dos gestos (grupo input)" sudo gpasswd -a "$USER" input
 if command -v libinput-gestures-setup >/dev/null; then
   passo "Iniciar gestos automaticamente ao entrar" libinput-gestures-setup autostart
-  if em_sessao_grafica && id -nG | grep -qw input; then
+  if em_sessao_grafica && id -nG | contem -w input; then
     passo "Iniciar gestos agora" libinput-gestures-setup restart
   else
     log "Os gestos começam a funcionar depois de sair e entrar de novo (ou reiniciar)."

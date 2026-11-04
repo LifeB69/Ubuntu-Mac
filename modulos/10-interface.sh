@@ -27,11 +27,11 @@ if icones_existem Papirus; then
 else
   pular "Ícones Papirus" "não instalados (módulo 08 falhou?)"
 fi
-if fc-list | grep -qi 'Inter'; then
+if fc-list | contem -i 'Inter'; then
   passo "Fonte da interface: Inter" xfset xsettings /Gtk/FontName string "Inter 10"
   passo "Fonte dos títulos: Inter" xfset xfwm4 /general/title_font string "Inter Semi-Bold 10"
 fi
-if fc-list | grep -qi 'JetBrains Mono'; then
+if fc-list | contem -i 'JetBrains Mono'; then
   passo "Fonte monoespaçada: JetBrains Mono" xfset xsettings /Gtk/MonospaceFontName string "JetBrains Mono 10"
   passo "Terminal: fonte JetBrains Mono" bash -c '
     xfconf-query -c xfce4-terminal -p /font-use-system -n -t bool -s false &&

@@ -32,7 +32,7 @@ Confira cada item. Alguns precisam do usuário (apertar teclas, fechar a tampa);
 | Item | Como verificar | Se falhar |
 |---|---|---|
 | Wi-Fi | `lsmod \| grep ^wl`, `nmcli device`, conectar numa rede | `dkms status`; reinstalar `broadcom-sta-dkms`; ver blacklist de `b43`/`bcma` |
-| Teclado ⌘ | ⌘C/⌘V num editor, ⌘Tab, ⌘ sozinho abre o menu, ⌘Espaço | `sudo keyd monitor` mostra as teclas; ajuste `arquivos/keyd-mac.conf`. **Confirme** que ⌘Espaço envia só `Super+Espaço` (sem Ctrl) |
+| Teclado ⌘ | ⌘C/⌘V num editor, ⌘Tab, ⌘ sozinho abre o menu, ⌘Espaço | `sudo keyd.rvaiya monitor` (no Ubuntu o comando se chama keyd.rvaiya) mostra as teclas; ajuste `arquivos/keyd-mac.conf`. **Confirme** que ⌘Espaço envia só `Super+Espaço` (sem Ctrl) |
 | Acentos | Option direito + `'` + `a` = á; Option direito + `,` = ç | `setxkbmap -query`; `/etc/default/keyboard` |
 | Teclas de função | brilho, volume, luz do teclado (F5/F6) | `hid_apple fnmode`; `ls /sys/class/leds` (`smc::kbd_backlight`) |
 | Touchpad | rolagem natural, toque = clique, 2 dedos = botão direito, palma ignorada ao digitar | `xinput list-props`; `arquivos/touchpad.conf`; `arquivos/libinput-quirks` (necessário por causa do keyd) |

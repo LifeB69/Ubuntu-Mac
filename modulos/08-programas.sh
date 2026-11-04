@@ -12,7 +12,7 @@ fi
 # O Snap demora bastante para abrir em máquinas antigas. A Mozilla mantém um
 # repositório apt oficial. Só removemos o Snap DEPOIS que o .deb instalar,
 # para você nunca ficar sem navegador.
-firefox_deb_ok() { dpkg-query -W -f='${Version}' firefox 2>/dev/null | grep -qv snap; }
+firefox_deb_ok() { dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem -v snap; }
 
 if [[ "$FIREFOX_DEB" != 1 ]]; then
   pular "Firefox .deb" "desligado no config.conf"
@@ -23,7 +23,7 @@ else
     local chave=/etc/apt/keyrings/packages.mozilla.org.asc
     sudo install -d -m 0755 /etc/apt/keyrings &&
       wget -qO- https://packages.mozilla.org/apt/repo-signing-key.gpg | sudo tee "$chave" >/dev/null &&
-      gpg -n -q --import --import-options import-show "$chave" | grep -q 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3 || {
+      gpg -n -q --import --import-options import-show "$chave" | contem 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3 || {
         echo "Impressão digital da chave da Mozilla não confere — abortando."; sudo rm -f "$chave"; return 1; }
     echo "deb [signed-by=$chave] https://packages.mozilla.org/apt mozilla main" |
       sudo tee /etc/apt/sources.list.d/mozilla.list >/dev/null
@@ -39,6 +39,9 @@ else
      passo "Instalar Firefox .deb (pt-BR)" tentar 2 sudo apt-get "${APT_OPTS[@]}" install --allow-downgrades firefox firefox-l10n-pt-br &&
      firefox_deb_ok; then
     if snap list firefox >/dev/null 2>&1; then
+      # Logo após a instalação o snapd ainda está "semeando" os snaps iniciais
+      # e recusa remoções ("seed change in progress"). Espera terminar (até 15 min).
+      passo "Esperar o snapd terminar a preparação inicial" sudo timeout 900 snap wait system seed.loaded
       passo "Remover Firefox Snap antigo" sudo timeout 600 snap remove --purge firefox
     fi
   else

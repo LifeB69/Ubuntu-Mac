@@ -102,7 +102,12 @@ tem_internet() {
     wget -q --spider --timeout=8 https://www.google.com 2>/dev/null
 }
 
-pacote_instalado() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'install ok installed'; }
+# "grep -q" num pipe com "set -o pipefail" dá falso negativo: o grep sai na
+# primeira linha encontrada, o comando anterior morre com SIGPIPE e o pipe
+# inteiro "falha". contem() lê a entrada até o fim e só devolve o resultado.
+contem() { grep "$@" >/dev/null; }
+
+pacote_instalado() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | contem 'install ok installed'; }
 
 apt_atualizar() { tentar 3 sudo apt-get "${APT_OPTS[@]}" update; }
 
