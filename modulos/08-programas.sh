@@ -36,7 +36,7 @@ else
     local chave=/etc/apt/keyrings/packages.mozilla.org.asc
     sudo install -d -m 0755 /etc/apt/keyrings &&
       wget -qO- https://packages.mozilla.org/apt/repo-signing-key.gpg | sudo tee "$chave" >/dev/null &&
-      gpg -n -q --import --import-options import-show "$chave" | contem 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3 || {
+      chave_confere "$chave" 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3 || {
         echo "Impressão digital da chave da Mozilla não confere — abortando."; sudo rm -f "$chave"; return 1; }
     echo "deb [signed-by=$chave] https://packages.mozilla.org/apt mozilla main" |
       sudo tee /etc/apt/sources.list.d/mozilla.list >/dev/null

@@ -160,6 +160,18 @@ esperar_snapd() {
   echo "1 snapd não terminou a preparação em 10 min" >"$marca"; return 1
 }
 
+# Confere a impressão digital de uma chave de assinatura (arquivo .asc/.gpg).
+# Usa uma pasta temporária: num usuário recém-criado ~/.gnupg ainda não existe
+# e o gpg aborta ("diretório inexistente").
+chave_confere() { # chave_confere arquivo impressão-digital
+  local h rc
+  h="$(mktemp -d)"
+  gpg --homedir "$h" --batch --show-keys --with-colons "$1" 2>/dev/null | contem "fpr:*:*:*:*:*:*:*:*:$2:"
+  rc=$?
+  rm -rf -- "$h"
+  return "$rc"
+}
+
 # O usuário pediu explicitamente este módulo (--somente NN)?
 # Usado para reaplicar coisas que normalmente só são aplicadas uma vez.
 modulo_pedido() { [[ " ${UBUNTU_MAC_SOMENTE:-} " == *" $1 "* ]]; }
