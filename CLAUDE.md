@@ -9,7 +9,12 @@ Você está rodando **dentro** do notebook que este repositório configura. Fale
 - **Objetivo do usuário:** um notebook leve e estável para usar Claude Desktop e Claude Code no dia a dia.
 - **O que já foi feito:** o `instalar.sh` rodou os módulos de `modulos/` (veja o `README.md`, seção "O que é configurado"). As opções estão em `config.conf`.
 
-## Logs (comece sempre por aqui)
+## Comece por aqui
+
+1. Rode `./verificar.sh` (ou `ubuntu-mac --verificar`). Ele mostra em segundos o que está funcionando (✔) e o que não está (✘), com uma dica para cada ✘.
+2. Depois leia os logs abaixo.
+
+## Logs
 
 `logs/ultimo/` aponta para a execução mais recente do `instalar.sh`:
 
@@ -56,6 +61,15 @@ Precisa do driver `facetimehd` (não existe nos repositórios do Ubuntu) e do fi
 
 O kernel é o 7.0, então confira se o driver compila (issues e forks recentes). Se funcionar, transforme os passos num módulo `modulos/11-webcam.sh` no mesmo padrão dos outros (usando `passo`, sem parar em erro). Se não compilar, registre o motivo aqui e siga em frente: a webcam não é essencial.
 
+## Git (para salvar as correções no GitHub)
+
+O usuário pode ter instalado pelo **ZIP** (repositório privado). Nesse caso `~/Ubuntu-Mac` **não** é um repositório git (confira com `git -C ~/Ubuntu-Mac status`). Para poder commitar e enviar correções:
+
+1. `sudo apt install gh` e `gh auth login` (o usuário faz o login pelo navegador).
+2. Clone ao lado: `gh repo clone LifeB69/Ubuntu-Mac ~/Ubuntu-Mac.git-tmp`.
+3. Mova o `.git` para a pasta atual: `mv ~/Ubuntu-Mac.git-tmp/.git ~/Ubuntu-Mac/ && rm -rf ~/Ubuntu-Mac.git-tmp`. Depois `git -C ~/Ubuntu-Mac status` mostra só as diferenças locais (a pasta `logs/` é ignorada).
+4. Assim o comando `ubuntu-mac` também passa a se atualizar do GitHub sozinho.
+
 ## Regras
 
 - **Nunca** mexa em partições, EFI, GRUB ou bootloader sem pedir ao usuário antes e explicar o risco.
@@ -68,6 +82,7 @@ O kernel é o 7.0, então confira se o driver compila (issues e forks recentes).
   - idempotente: rodar duas vezes não pode quebrar nada
 - Depois de mudar scripts, rode `bash -n` e, se tiver, `shellcheck`. Faça commits com mensagens claras em português. Pergunte ao usuário antes de dar `git push`.
 - Ao terminar, atualize a seção "Estado atual" abaixo.
+- Se acrescentar uma checagem nova (ex.: webcam, suspensão), coloque-a também no `verificar.sh`.
 
 ## Estado atual
 
