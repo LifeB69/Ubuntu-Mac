@@ -112,6 +112,13 @@ desativar_cdrom() {
   return 0
 }
 MODULO_ATUAL=00-preparo passo "Desativar a fonte de pacotes do pendrive (cdrom)" desativar_cdrom
+
+# Se uma instalação anterior foi interrompida (bateria, queda de energia...),
+# termina de configurar o que ficou pela metade antes de seguir.
+consertar_dpkg() {
+  sudo dpkg --configure -a && sudo apt-get "${APT_OPTS[@]}" -f install
+}
+MODULO_ATUAL=00-preparo passo "Terminar instalações interrompidas (dpkg)" consertar_dpkg
 if [[ "$ONLINE" == 1 ]]; then
   MODULO_ATUAL=00-preparo passo "Atualizar lista de pacotes" apt_atualizar
 fi
