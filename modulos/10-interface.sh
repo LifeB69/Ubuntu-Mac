@@ -7,6 +7,14 @@ if ! em_sessao_grafica; then
   return 0
 fi
 
+# A aparência é aplicada uma vez só, para não desfazer o que você mudar depois
+# (tema, dock, atalhos). Para reaplicar tudo: ./instalar.sh --somente 10
+MARCA_INTERFACE="$HOME/.config/ubuntu-mac/interface-aplicada"
+if [[ -f "$MARCA_INTERFACE" ]] && ! modulo_pedido 10; then
+  pular "Interface" "já aplicada antes (para reaplicar: ubuntu-mac --somente 10)"
+  return 0
+fi
+
 # Define uma configuração do Xfce (cria se não existir).
 xfset() { # canal propriedade tipo valor
   xfconf-query -c "$1" -p "$2" -s "$4" 2>/dev/null || xfconf-query -c "$1" -p "$2" -n -t "$3" -s "$4"
@@ -67,7 +75,7 @@ passo "Atalho: ⌘+Shift+4 captura uma área da tela" \
 
 # ---------- Dock (Plank) ----------
 if ! command -v plank >/dev/null; then
-  pular "Dock (Plank)" "plank não instalado (módulo 08 falhou?)"
+  pular "Dock (Plank)" "plank não instalado (módulo 08 falhou?) — rode de novo com --somente 08 10"
   return 0
 fi
 
@@ -114,3 +122,8 @@ passo "Abrir a dock automaticamente ao entrar" bash -c '
   printf "[Desktop Entry]\nType=Application\nName=Plank (dock)\nExec=plank\nX-GNOME-Autostart-enabled=true\n" \
     > "$HOME/.config/autostart/plank.desktop"'
 passo "Iniciar a dock agora" bash -c '(setsid plank >/dev/null 2>&1 &) ; sleep 2; pgrep -x plank'
+
+# Só marca como aplicada se nada falhou ou foi pulado neste módulo.
+if ! grep -E "^(FALHOU|PULADO)"$'\t'"$MODULO_ATUAL"$'\t' "$RESUMO" >/dev/null; then
+  mkdir -p "$(dirname "$MARCA_INTERFACE")" && date >"$MARCA_INTERFACE"
+fi

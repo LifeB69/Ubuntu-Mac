@@ -14,6 +14,19 @@ fi
 # para você nunca ficar sem navegador.
 firefox_deb_ok() { dpkg-query -W -f='${Version}' firefox 2>/dev/null | contem -v snap; }
 
+# Depois de trocar o Snap pelo .deb, o atalho de navegador padrão do Xfce
+# e os links (http/https) passam a apontar para o Firefox novo.
+navegador_padrao_firefox() {
+  local f="$HOME/.config/xfce4/helpers.rc"
+  mkdir -p "$(dirname "$f")"
+  if grep -q '^WebBrowser=' "$f" 2>/dev/null; then
+    sed -i 's/^WebBrowser=.*/WebBrowser=firefox/' "$f"
+  else
+    echo 'WebBrowser=firefox' >>"$f"
+  fi
+  xdg-mime default firefox.desktop x-scheme-handler/http x-scheme-handler/https text/html
+}
+
 if [[ "$FIREFOX_DEB" != 1 ]]; then
   pular "Firefox .deb" "desligado no config.conf"
 elif firefox_deb_ok; then
@@ -38,6 +51,7 @@ else
   if passo "Adicionar repositório oficial da Mozilla" adicionar_repo_mozilla &&
      passo "Instalar Firefox .deb (pt-BR)" tentar 2 sudo apt-get "${APT_OPTS[@]}" install --allow-downgrades firefox firefox-l10n-pt-br &&
      firefox_deb_ok; then
+    passo "Firefox como navegador padrão" navegador_padrao_firefox
     if snap list firefox >/dev/null 2>&1; then
       # Logo após a instalação o snapd ainda está "semeando" os snaps iniciais
       # e recusa remoções ("seed change in progress"). Espera terminar (até 15 min).

@@ -28,28 +28,51 @@ _registrar() { # status descrição
   fi
 }
 
+_duracao() { # segundos -> "2 min 05 s" / "40 s"
+  local s="$1"
+  if ((s >= 60)); then printf '%d min %02d s' $((s / 60)) $((s % 60)); else printf '%d s' "$s"; fi
+}
+
 # passo "descrição" comando args...
 # Roda o comando, manda a saída para o log e registra o resultado.
+# Enquanto roda, mostra o tempo decorrido (para passos longos não parecerem travados).
 passo() {
   local desc="$1"; shift
+  local inicio=$SECONDS
   printf '%s  ▶ %s ... ' "[$(agora)]" "$desc"
   {
     echo
     echo "===== [$(agora)] ${MODULO_ATUAL:-geral} :: $desc"
     echo "----- comando: $*"
   } >>"$LOG_GERAL"
-  if "$@" >>"$LOG_GERAL" 2>&1; then
-    echo "${C_OK}OK${C_0}"
-    echo "----- resultado: OK" >>"$LOG_GERAL"
+  # "<&0": sem isso o bash liga a entrada de comandos em segundo plano ao
+  # /dev/null, e os passos que recebem texto (escrever_root <<CONF) ficariam vazios.
+  # "9>&-": programas que continuam rodando (dock, gestos) não herdam a trava do instalar.sh.
+  "$@" <&0 >>"$LOG_GERAL" 2>&1 9>&- &
+  local pid=$!
+  if [[ -t 1 ]]; then
+    while kill -0 "$pid" 2>/dev/null; do
+      sleep 0.3
+      local s=$((SECONDS - inicio))
+      # \e7/\e8 = salva/restaura a posição do cursor; o tempo é reescrito no mesmo lugar.
+      ((s >= 5)) && printf '\e7%s\e8' "($(_duracao "$s"))"
+    done
+  fi
+  wait "$pid"
+  local rc=$?
+  local s=$((SECONDS - inicio)) t=""
+  ((s >= 30)) && t=" ($(_duracao "$s"))"
+  [[ -t 1 ]] && printf '\e[K'
+  if ((rc == 0)); then
+    echo "${C_OK}OK${C_0}$t"
+    echo "----- resultado: OK$t" >>"$LOG_GERAL"
     _registrar OK "$desc"
     return 0
-  else
-    local rc=$?
-    echo "${C_ERR}FALHOU (código $rc)${C_0}"
-    echo "----- resultado: FALHOU (código $rc)" >>"$LOG_GERAL"
-    _registrar FALHOU "$desc (código $rc)"
-    return "$rc"
   fi
+  echo "${C_ERR}FALHOU (código $rc)${C_0}$t"
+  echo "----- resultado: FALHOU (código $rc)" >>"$LOG_GERAL"
+  _registrar FALHOU "$desc (código $rc)"
+  return "$rc"
 }
 
 pular() { # pular "descrição" "motivo"
@@ -103,9 +126,26 @@ ativar_servico() { # ativar_servico nome.service
 }
 
 tem_internet() {
-  wget -q --spider --timeout=8 https://archive.ubuntu.com/ubuntu/ 2>/dev/null ||
-    wget -q --spider --timeout=8 https://www.google.com 2>/dev/null
+  wget -q --spider --timeout=8 --tries=1 https://archive.ubuntu.com/ubuntu/ 2>/dev/null ||
+    wget -q --spider --timeout=8 --tries=1 https://www.google.com 2>/dev/null
 }
+
+# Espera (até 15 min) o dpkg ficar livre. No primeiro boot as atualizações
+# automáticas do Ubuntu costumam estar rodando, e o "dpkg" puro não sabe esperar.
+esperar_dpkg() {
+  local i
+  for ((i = 0; i < 180; i++)); do
+    sudo fuser /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock >/dev/null 2>&1 || return 0
+    ((i == 0)) && echo "dpkg ocupado (provavelmente atualizações automáticas); aguardando..."
+    sleep 5
+  done
+  echo "dpkg continua ocupado após 15 min."
+  return 1
+}
+
+# O usuário pediu explicitamente este módulo (--somente NN)?
+# Usado para reaplicar coisas que normalmente só são aplicadas uma vez.
+modulo_pedido() { [[ " ${UBUNTU_MAC_SOMENTE:-} " == *" $1 "* ]]; }
 
 # "grep -q" num pipe com "set -o pipefail" dá falso negativo: o grep sai na
 # primeira linha encontrada, o comando anterior morre com SIGPIPE e o pipe

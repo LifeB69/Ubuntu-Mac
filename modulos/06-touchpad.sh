@@ -27,6 +27,8 @@ if [[ "$ONLINE" != 1 ]]; then pular "Gestos do touchpad" "sem internet"; return 
 instalar_lista "dependências dos gestos" libinput-tools wmctrl xdotool python3 make git xfdashboard
 
 LG_VERSAO=2.81
+# Commit exato da versão 2.81: se a tag for alterada no GitHub, a instalação recusa.
+LG_COMMIT=9552f0dd9b9e78e57840c58c0006e6519bb6e038
 instalar_libinput_gestures() {
   if command -v libinput-gestures >/dev/null; then
     echo "libinput-gestures já instalado"; return 0
@@ -35,17 +37,26 @@ instalar_libinput_gestures() {
   local src="$tmp/libinput-gestures-$LG_VERSAO"
   # Versão fixa (tag), para a instalação ser sempre igual. git primeiro; .tar.gz como reserva.
   if ! tentar 3 git clone -q --depth 1 --branch "$LG_VERSAO" https://github.com/bulletmark/libinput-gestures "$src"; then
-    tentar 3 wget -qO "$tmp/lg.tar.gz" "https://github.com/bulletmark/libinput-gestures/archive/refs/tags/$LG_VERSAO.tar.gz" &&
-      tar xzf "$tmp/lg.tar.gz" -C "$tmp"
+    echo "Não consegui baixar o libinput-gestures."; rm -rf "$tmp"; return 1
   fi
-  [[ -f "$src/Makefile" ]] && sudo make -C "$src" install
+  local commit; commit="$(git -C "$src" rev-parse HEAD)"
+  if [[ "$commit" != "$LG_COMMIT" ]]; then
+    echo "Commit inesperado ($commit, esperado $LG_COMMIT) — não vou instalar."; rm -rf "$tmp"; return 1
+  fi
+  sudo make -C "$src" install
   local rc=$?
   rm -rf "$tmp"
   return "$rc"
 }
 passo "Instalar libinput-gestures $LG_VERSAO" instalar_libinput_gestures
 passo "Instalar ajudante de zoom pela pinça" copiar_root ubuntu-mac-zoom /usr/local/bin/ubuntu-mac-zoom 755
-passo "Configurar gestos" install -D -m 644 "$REPO/arquivos/libinput-gestures.conf" "$HOME/.config/libinput-gestures.conf"
+# Não sobrescreve gestos que você personalizou (para reaplicar: ./instalar.sh --somente 06).
+CONF_GESTOS="$HOME/.config/libinput-gestures.conf"
+if [[ ! -f "$CONF_GESTOS" ]] || cmp -s "$REPO/arquivos/libinput-gestures.conf" "$CONF_GESTOS" || modulo_pedido 06; then
+  passo "Configurar gestos" install -D -m 644 "$REPO/arquivos/libinput-gestures.conf" "$CONF_GESTOS"
+else
+  pular "Configurar gestos" "você personalizou ~/.config/libinput-gestures.conf (para reaplicar: --somente 06)"
+fi
 # Ler o touchpad exige o grupo "input" (vale a partir do próximo login).
 passo "Permitir leitura dos gestos (grupo input)" sudo gpasswd -a "$USER" input
 if command -v libinput-gestures-setup >/dev/null; then

@@ -16,7 +16,17 @@ if wl_funcionando && pacote_instalado broadcom-sta-dkms; then
   return 0
 fi
 
+# Monta o pendrive do Xubuntu se ele estiver conectado mas não montado.
+montar_pendrive() {
+  local dev
+  for dev in $(lsblk -rpno NAME,FSTYPE 2>/dev/null | awk '$2=="iso9660"{print $1}'); do
+    findmnt -rn -S "$dev" >/dev/null 2>&1 && continue
+    udisksctl mount --no-user-interaction -b "$dev" 2>&1 || true
+  done
+}
+
 instalar_do_pendrive() {
+  montar_pendrive
   local pool
   pool="$(find /cdrom /media/"$USER" /run/media/"$USER" -maxdepth 6 -type d \
           -path '*pool/restricted/b/broadcom-sta' 2>/dev/null | head -n1)"
@@ -38,8 +48,20 @@ else
   passo "Instalar driver Wi-Fi (pendrive)" instalar_do_pendrive
 fi
 
+# Drivers livres que "pegam" o chip antes do wl e impedem o Wi-Fi de funcionar.
+# (O pacote já faz isso; este arquivo garante, mesmo se o pacote mudar.)
+passo "Bloquear drivers que conflitam com o wl" escrever_root /etc/modprobe.d/ubuntu-mac-broadcom.conf <<'CONF'
+# Gerado pelo Ubuntu-Mac — o BCM4360 do MacBook Air só funciona com o driver "wl".
+blacklist b43
+blacklist b43legacy
+blacklist ssb
+blacklist bcma
+blacklist brcmsmac
+blacklist brcmfmac
+CONF
+
 carregar_wl() {
-  sudo modprobe -r b43 bcma ssb brcmsmac 2>/dev/null
+  sudo modprobe -r b43 b43legacy bcma ssb brcmsmac brcmfmac 2>/dev/null
   sudo modprobe wl
 }
 passo "Carregar o driver wl" carregar_wl

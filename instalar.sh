@@ -6,6 +6,7 @@
 #   ./instalar.sh --somente 06 09    roda só os módulos indicados (pelo número)
 #   ./instalar.sh --pular 10         roda tudo, menos os módulos indicados
 #   ./instalar.sh --listar           mostra os módulos
+#   ./instalar.sh --verificar        confere se está tudo funcionando (depois de reiniciar)
 #
 # Não para quando algo falha: registra e continua. No final mostra um resumo.
 # Logs ficam em logs/<data-hora>/ (e o atalho logs/ultimo aponta para o mais recente).
@@ -22,15 +23,22 @@ while (($#)); do
   case "$1" in
     --somente) shift; while (($#)) && [[ "$1" != --* ]]; do SOMENTE+=("$1"); shift; done ;;
     --pular) shift; while (($#)) && [[ "$1" != --* ]]; do PULAR+=("$1"); shift; done ;;
+    --verificar) exec bash "$REPO/verificar.sh" ;;
     --listar)
       for m in "$REPO"/modulos/[0-9]*.sh; do
         printf '  %s  %s\n' "$(basename "$m" .sh)" "$(sed -n 's/^# DESCRICAO: //p' "$m")"
       done
       exit 0 ;;
-    -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
     *) echo "Opção desconhecida: $1 (use --help)"; exit 2 ;;
   esac
 done
+
+# Aceita "5" ou "05" para o módulo 05.
+normalizar() { local x; for x in "$@"; do [[ "$x" =~ ^[0-9]+$ ]] && printf '%02d ' "$((10#$x))" || printf '%s ' "$x"; done; }
+read -r -a SOMENTE <<<"$(normalizar "${SOMENTE[@]}")"
+read -r -a PULAR <<<"$(normalizar "${PULAR[@]}")"
+export UBUNTU_MAC_SOMENTE="${SOMENTE[*]}"
 
 if [[ $EUID -eq 0 ]]; then
   echo "Rode como seu usuário normal (sem sudo). O script pede a senha quando precisar."
@@ -42,6 +50,14 @@ if [[ -z "${UBUNTU_MAC_INIBIDO:-}" ]] && command -v systemd-inhibit >/dev/null &
    systemd-inhibit --what=idle:sleep --who=ubuntu-mac --why=teste true 2>/dev/null; then
   export UBUNTU_MAC_INIBIDO=1
   exec systemd-inhibit --what=idle:sleep --who=ubuntu-mac --why="Instalando Ubuntu-Mac" "$0" "$@"
+fi
+
+# Uma execução por vez.
+mkdir -p "$REPO/logs"
+exec 9>"$REPO/logs/.trava"
+if ! flock -n 9; then
+  echo "O Ubuntu-Mac já está rodando em outro terminal. Espere ele terminar."
+  exit 1
 fi
 
 CARIMBO="$(date +%Y-%m-%d_%H%M%S)"
@@ -75,6 +91,16 @@ trap 'kill $SUDO_PID 2>/dev/null' EXIT
   echo "Config:"; grep -vE '^\s*(#|$)' "$REPO/config.conf" 2>/dev/null
   echo "Git: $(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || echo 'sem git')"
 } >>"$LOG_GERAL"
+
+# Carregador e espaço em disco (a instalação demora e baixa bastante coisa).
+na_tomada() { local f; for f in /sys/class/power_supply/*/online; do [[ -f "$f" && "$(cat "$f")" == 1 ]] && return 0; done; return 1; }
+if ls /sys/class/power_supply/*/online >/dev/null 2>&1 && ! na_tomada; then
+  aviso "O notebook está na bateria. Conecte o carregador: a instalação pode levar mais de meia hora."
+fi
+livre_gb=$(df -BG --output=avail / | tail -1 | tr -dc 0-9)
+if [[ -n "$livre_gb" ]] && ((livre_gb < 6)); then
+  aviso "Pouco espaço em disco (${livre_gb} GB livres). Algumas instalações podem falhar."
+fi
 
 if tem_internet; then
   export ONLINE=1
@@ -116,7 +142,7 @@ MODULO_ATUAL=00-preparo passo "Desativar a fonte de pacotes do pendrive (cdrom)"
 # Se uma instalação anterior foi interrompida (bateria, queda de energia...),
 # termina de configurar o que ficou pela metade antes de seguir.
 consertar_dpkg() {
-  sudo dpkg --configure -a && sudo apt-get "${APT_OPTS[@]}" -f install
+  esperar_dpkg && sudo dpkg --configure -a && sudo apt-get "${APT_OPTS[@]}" -f install
 }
 MODULO_ATUAL=00-preparo passo "Terminar instalações interrompidas (dpkg)" consertar_dpkg
 if [[ "$ONLINE" == 1 ]]; then
@@ -195,4 +221,12 @@ if ((n_f > 0)); then
 fi
 echo
 echo "Resumo completo: $LOG_DIR/resumo.txt"
-echo "${C_B}Reinicie o computador para aplicar tudo:  sudo reboot${C_0}"
+echo
+echo "${C_B}Reinicie o computador para aplicar tudo.${C_0} Depois de reiniciar, confira com:  ubuntu-mac --verificar"
+if [[ -t 0 ]]; then
+  read -r -t 300 -p "Reiniciar agora? [s/N] " resposta || resposta=""
+  if [[ "$resposta" =~ ^[sS] ]]; then
+    kill "$SUDO_PID" 2>/dev/null
+    sudo systemctl reboot
+  fi
+fi
