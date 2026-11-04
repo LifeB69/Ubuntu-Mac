@@ -12,7 +12,6 @@ passo "Carregar módulos de sensores (coretemp, applesmc)" bash -c '
   printf "coretemp\napplesmc\n" | sudo tee /etc/modules-load.d/ubuntu-mac-sensores.conf >/dev/null
   sudo modprobe coretemp; sudo modprobe applesmc'
 
-passo "Ativar TLP" sudo systemctl enable --now tlp.service
-passo "Ativar thermald" sudo systemctl enable --now thermald.service
-passo "Ativar mbpfan" sudo systemctl enable --now mbpfan.service
-passo "Reiniciar mbpfan com a configuração nova" sudo systemctl restart mbpfan.service
+passo "Ativar TLP" ativar_servico tlp.service
+passo "Ativar thermald" ativar_servico thermald.service
+passo "Ativar mbpfan" ativar_servico mbpfan.service

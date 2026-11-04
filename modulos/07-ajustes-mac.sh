@@ -2,7 +2,7 @@
 # DESCRICAO: Ajustes do MacBook — SSD, microcódigo Intel e internet do celular via cabo
 
 # TRIM semanal no SSD (mantém o desempenho).
-passo "Ativar TRIM semanal do SSD" sudo systemctl enable --now fstrim.timer
+passo "Ativar TRIM semanal do SSD" ativar_servico fstrim.timer
 
 # Internet pelo celular via cabo USB:
 #  - Android: funciona direto (driver do kernel).

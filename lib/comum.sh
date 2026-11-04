@@ -75,6 +75,28 @@ tentar() {
   return 1
 }
 
+# wget com limite de tempo: o padrão do wget pode ficar até horas tentando.
+wget() { command wget --timeout=30 --tries=3 "$@"; }
+
+# Ativa e (re)inicia um serviço SEM esperar por ele (--no-block).
+# Um serviço que trava ao iniciar não pode prender a instalação inteira.
+ativar_servico() { # ativar_servico nome.service
+  sudo systemctl enable "$1" || return 1
+  sudo systemctl restart --no-block "$1" || return 1
+  local i
+  for ((i = 0; i < 30; i++)); do
+    systemctl is-active --quiet "$1" && { echo "$1: ativo"; return 0; }
+    if systemctl is-failed --quiet "$1"; then
+      systemctl status "$1" --no-pager -l 2>&1 | tail -20
+      return 1
+    fi
+    sleep 1
+  done
+  echo "$1 ainda está iniciando depois de 30 s — seguindo em frente."
+  systemctl status "$1" --no-pager -l 2>&1 | tail -10
+  return 0
+}
+
 tem_internet() {
   wget -q --spider --timeout=8 https://archive.ubuntu.com/ubuntu/ 2>/dev/null ||
     wget -q --spider --timeout=8 https://www.google.com 2>/dev/null

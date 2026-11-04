@@ -24,12 +24,11 @@ vm.dirty_background_ratio = 5
 vm.dirty_ratio = 10
 CONF
 passo "Aplicar ajustes do kernel" sudo sysctl --system
-passo "Ativar zram" sudo systemctl restart zramswap.service
+passo "Ativar zram" ativar_servico zramswap.service
 
 # earlyoom: se a memória acabar, fecha o programa mais pesado em vez de travar tudo.
 passo "Configurar earlyoom" escrever_root /etc/default/earlyoom <<'CONF'
 # Gerado pelo Ubuntu-Mac
 EARLYOOM_ARGS="-m 5 -s 10 -r 3600 -n --avoid ^(Xorg|xfwm4|xfce4-session|xfce4-panel|lightdm|systemd)$ --prefer ^(firefox|Isolated|chrome|chromium)"
 CONF
-passo "Ativar earlyoom" sudo systemctl enable --now earlyoom.service
-passo "Reiniciar earlyoom" sudo systemctl restart earlyoom.service
+passo "Ativar earlyoom" ativar_servico earlyoom.service

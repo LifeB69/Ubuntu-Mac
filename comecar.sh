@@ -40,7 +40,7 @@ elif command -v git >/dev/null && git clone -b "$RAMO" "$REPO_URL" "$DEST"; then
   :
 else
   mkdir -p "$DEST" &&
-    wget -qO- "$REPO_URL/archive/refs/heads/$RAMO.tar.gz" | tar xz --strip-components=1 -C "$DEST" || {
+    wget --timeout=30 --tries=3 -qO- "$REPO_URL/archive/refs/heads/$RAMO.tar.gz" | tar xz --strip-components=1 -C "$DEST" || {
       echo "Falha ao baixar o repositório. Confira a internet (e se o repositório é público)."
       exit 1
     }

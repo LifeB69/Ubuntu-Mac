@@ -8,7 +8,7 @@ if [[ "$ONLINE" != 1 ]]; then pular "Claude" "sem internet"; return 0; fi
 if [[ "$INSTALAR_CLAUDE_DESKTOP" == 1 ]]; then
   adicionar_repo_claude() {
     local chave=/usr/share/keyrings/claude-desktop-archive-keyring.asc
-    tentar 3 sudo wget -qO "$chave" https://downloads.claude.ai/claude-desktop/key.asc || return 1
+    tentar 3 sudo wget --timeout=30 --tries=3 -qO "$chave" https://downloads.claude.ai/claude-desktop/key.asc || return 1
     if ! gpg --show-keys "$chave" 2>/dev/null | grep -q 31DDDE24DDFAB679F42D7BD2BAA929FF1A7ECACE; then
       echo "Impressão digital da chave da Anthropic não confere — abortando."
       sudo rm -f "$chave"

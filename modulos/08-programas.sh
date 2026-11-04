@@ -39,7 +39,7 @@ else
      passo "Instalar Firefox .deb (pt-BR)" tentar 2 sudo apt-get "${APT_OPTS[@]}" install --allow-downgrades firefox firefox-l10n-pt-br &&
      firefox_deb_ok; then
     if snap list firefox >/dev/null 2>&1; then
-      passo "Remover Firefox Snap antigo" sudo snap remove --purge firefox
+      passo "Remover Firefox Snap antigo" sudo timeout 600 snap remove --purge firefox
     fi
   else
     aviso "Firefox .deb não instalou; o Firefox Snap continua funcionando normalmente."

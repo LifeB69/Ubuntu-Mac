@@ -36,5 +36,4 @@ fi
 
 instalar_lista "keyd" keyd
 passo "Configurar atalhos do Mac (keyd)" copiar_root keyd-mac.conf /etc/keyd/default.conf
-passo "Ativar keyd" sudo systemctl enable --now keyd.service
-passo "Recarregar keyd" sudo systemctl restart keyd.service
+passo "Ativar keyd" ativar_servico keyd.service
