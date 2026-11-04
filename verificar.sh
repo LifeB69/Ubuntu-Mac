@@ -49,6 +49,12 @@ fi
 
 echo; echo "${B}Teclado e touchpad${Z}"
 checa "keyd (⌘ como no Mac)" "sudo systemctl restart keyd; journalctl -u keyd -n 20" ativo keyd
+if [[ -f /etc/keyd/default.conf && -f "$(dirname "$0")/arquivos/keyd-mac.conf" ]] &&
+   contem -F "$(head -1 "$(dirname "$0")/arquivos/keyd-mac.conf")" /etc/keyd/default.conf; then
+  ok "Atalhos do Mac instalados (/etc/keyd/default.conf)"
+else
+  nao "Atalhos do Mac instalados (/etc/keyd/default.conf)" "./instalar.sh --somente 05"
+fi
 checa "Layout com acentos ($(. /etc/default/keyboard 2>/dev/null; echo "${XKBLAYOUT:-?} ${XKBVARIANT:-}"))" \
   "./instalar.sh --somente 05" test -f /etc/default/keyboard
 checa "Configuração do touchpad" "./instalar.sh --somente 06" test -f /etc/X11/xorg.conf.d/30-ubuntu-mac-touchpad.conf
@@ -82,6 +88,7 @@ checa "Claude Code (comando claude)" "./instalar.sh --somente 09; abra um termin
 
 echo; echo "${B}Aparência${Z}"
 checa "Dock (Plank) rodando" "plank &   (e confira ~/.config/autostart/plank.desktop)" pgrep -u "$USER" -x plank
+checa "Terminal: ⌘C copia e ⌘V cola" "./instalar.sh --somente 05" test -f "$HOME/.config/xfce4/terminal/accels.scm"
 checa "Dock abre sozinha ao entrar" "./instalar.sh --somente 10" test -f "$HOME/.config/autostart/plank.desktop"
 if command -v xfconf-query >/dev/null && [[ -n "${DISPLAY:-}" ]]; then
   tema=$(xfconf-query -c xsettings -p /Net/ThemeName 2>/dev/null)

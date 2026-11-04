@@ -54,44 +54,16 @@ Resumo:
 
 As opções ficam em [`config.conf`](config.conf) (layout do teclado, ⌘ como Ctrl, Firefox, Cowork etc.).
 
-### Atalhos de teclado
+### Teclado e touchpad
 
-| Tecla | Faz |
-|---|---|
-| ⌘C / ⌘V / ⌘X / ⌘Z / ⌘A / ⌘S | copiar / colar / recortar / desfazer / tudo / salvar |
-| ⌘Q / ⌘W / ⌘T | fechar app / fechar aba / nova aba |
-| ⌘Tab | trocar de janela |
-| ⌘ (tocar sozinho) ou ⌘Espaço | menu e busca de aplicativos |
-| ⌘← / ⌘→ | início / fim da linha |
-| ⌥← / ⌥→ / ⌥Backspace | pular / apagar palavra (Option esquerdo) |
-| ⌘[ / ⌘] | voltar / avançar (navegador, arquivos) |
-| ⌘⇧3 / ⌘⇧4 | capturar a tela inteira / uma área |
-| Ctrl+Alt+T | abrir o terminal |
-| No terminal: ⌘⇧C / ⌘⇧V | copiar / colar |
-| No terminal: **Ctrl**+C (Ctrl de verdade) | interromper o programa |
-| Option direito + `'`, depois `a` | á, é, í, ó, ú |
-| Option direito + ⇧ + `~`, depois `a` | ã, õ |
-| Option direito + `6`, depois `e` | ê, â, ô |
-| Option direito + `` ` ``, depois `a` | à |
-| Option direito + `,` | ç |
-| fn + F1…F12 | F1…F12 (sem fn: brilho, volume, mídia) |
+Funcionam **como no macOS**. A lista completa está em **[ATALHOS.md](ATALHOS.md)**. Destaques:
 
-### Touchpad
+- **⌘C ⌘V ⌘X** copiam e colam em todo lugar, **inclusive no Terminal**, onde **⌃C** continua interrompendo o programa. Assim, ⌘C não fecha o Claude Code sem querer.
+- **Acentos do Mac** (layout *English (Macintosh)*): ⌥e+a = á, ⌥n+a = ã, ⌥i+e = ê, ⌥c = ç.
+- **⌘Q ⌘H ⌘M ⌘Tab ⌘` ⌘Espaço ⌘⇧3/4/5 ⌃⌘Q ⌥⌘Esc ⌥←/→**, F3 = todas as janelas, F4 = aplicativos.
+- Touchpad: rolagem natural, toque para clicar, gestos de 3 e 4 dedos, pinça para zoom.
 
-| Gesto | Faz |
-|---|---|
-| tocar com 1 dedo | clique |
-| tocar ou clicar com 2 dedos | botão direito |
-| tocar com 3 dedos | botão do meio (colar seleção, abrir link em nova aba) |
-| arrastar com 2 dedos | rolar (rolagem natural, igual ao Mac) |
-| tocar duas vezes e arrastar | arrastar janelas e arquivos |
-| pinça (abrir/fechar 2 dedos) | zoom (no Firefox é suave; nos outros apps vai em passos, como ⌘+ e ⌘−) |
-| 3 dedos ← → | trocar de área de trabalho |
-| 3 dedos ↑ | ver todas as janelas (parecido com o Mission Control) |
-| 3 dedos ↓ | mostrar a área de trabalho |
-| 4 dedos ← → | voltar / avançar no navegador |
-
-O que **não** dá para ter igual ao macOS: o "arrastar com 3 dedos" e as animações que acompanham os dedos em tempo real. No XFCE os gestos disparam a ação quando você termina o movimento.
+Como funciona: o [keyd](https://github.com/rvaiya/keyd) traduz as teclas antes de chegarem aos programas (`arquivos/keyd-mac.conf`). Cada combinação tem um teste no simulador oficial do keyd: `testes/keyd/rodar.sh`.
 
 ### O Claude usando o navegador
 

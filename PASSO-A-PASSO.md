@@ -47,7 +47,7 @@ O resultado **tem que ser exatamente**:
 Se for diferente, apague o arquivo e baixe de novo.
 
 ### A5. Gravar o pendrive
-1. Baixe e instale o **balenaEtcher**: https://etcher.balena.io/
+1. Baixe e instale o **balenaEtcher**: https://etcher.balena.io/ (versão para macOS; ele exige macOS 11 ou mais novo, e o seu Monterey 12 atende)
    (se o macOS bloquear: **Preferências do Sistema → Segurança e Privacidade → Abrir Mesmo Assim**)
 2. Abra o Etcher → **Flash from file** → escolha o `.iso` → **Select target** → escolha o **pendrive** (confira o tamanho, para não escolher outro disco) → **Flash!**
 3. Ele pede a senha do Mac. Espere terminar o "Validating". Se o macOS disser que "o disco não pode ser lido", clique em **Ejetar**. Isso é normal.
@@ -63,8 +63,9 @@ Ache o pendrive pelo tamanho (ex.: `/dev/disk2`). **Errar o número apaga o disc
 diskutil unmountDisk /dev/disk2
 ```
 ```bash
-sudo dd if=$HOME/Downloads/xubuntu-26.04.1-desktop-amd64.iso of=/dev/rdisk2 bs=4m status=progress
+sudo dd if=$HOME/Downloads/xubuntu-26.04.1-desktop-amd64.iso of=/dev/rdisk2 bs=4m
 ```
+Ele não mostra progresso sozinho: aperte **Ctrl+T** para ver quanto já foi gravado. Termina em 5 a 15 minutos.
 ```bash
 diskutil eject /dev/disk2
 ```
@@ -201,30 +202,15 @@ Ele lê os logs, corrige o que falhou e testa com você o que só dá para testa
 
 ---
 
-## Parte E — Cola rápida
+## Parte E — Teclado e touchpad
 
-| Teclado | Faz |
-|---|---|
-| ⌘C ⌘V ⌘X ⌘Z ⌘A ⌘S ⌘Q ⌘W ⌘T | igual ao Mac |
-| ⌘Tab | trocar de janela |
-| ⌘ (toque rápido) ou ⌘Espaço | menu e busca de apps |
-| ⌘← ⌘→ / ⌥← ⌥→ | início/fim da linha / pular palavra |
-| ⌘[ ⌘] | voltar / avançar |
-| ⌘⇧3 / ⌘⇧4 | captura de tela inteira / de uma área |
-| No Terminal: ⌘⇧C / ⌘⇧V | copiar / colar |
-| No Terminal: **Ctrl**+C | interromper o programa |
-| ⌥ direito + `'` depois `a` | á (⌥ direito + `,` = ç; ⌥ direito + ⇧ + `~` depois `a` = ã) |
+O teclado funciona **como no Mac**: ⌘C/⌘V (inclusive no Terminal), ⌘Q, ⌘Tab, ⌘Espaço, ⌥e+a = á, ⌥n+a = ã, ⌥c = ç, F3 mostra todas as janelas, F4 os aplicativos.
+A lista completa, com touchpad e gestos, está em **[ATALHOS.md](ATALHOS.md)**.
 
-| Touchpad | Faz |
-|---|---|
-| tocar 1 / 2 / 3 dedos | clique / botão direito / botão do meio |
-| 2 dedos arrastando | rolar (rolagem natural) |
-| pinça | zoom |
-| 3 dedos ← → | trocar de área de trabalho |
-| 3 dedos ↑ / ↓ | ver todas as janelas / mostrar a mesa |
-| 4 dedos ← → | voltar / avançar |
-
-Os gestos começam a funcionar **depois de reiniciar**.
+Três detalhes:
+- No Terminal, **⌃C** (Control) interrompe o programa e **⌘C** copia, igual ao Mac.
+- A tecla **⏻** pergunta o que fazer (suspender, reiniciar ou desligar), em vez de desligar direto.
+- Os **gestos** do touchpad começam a funcionar depois de reiniciar.
 
 ---
 
