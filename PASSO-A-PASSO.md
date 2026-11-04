@@ -8,7 +8,7 @@ Há também uma **versão visual**, com etapas marcáveis e botões para copiar 
 
 **O que você precisa:**
 
-- [ ] Pendrive de **8 GB ou mais**. Ele será apagado.
+- [ ] **Pendrive USB** de 8 GB ou mais (não use cartão SD em leitor USB: o Mac costuma não reconhecê-lo na hora de ligar). Ele será apagado.
 - [ ] **Carregador** do Mac, ligado na tomada o tempo todo.
 - [ ] **Cabo USB do celular** (o MacBook Air 2015 tem USB-A normal).
 - [ ] Senha do Wi-Fi de casa.
@@ -237,8 +237,10 @@ Três detalhes:
 
 ## Parte F — Se algo der errado
 
-**F1. Segurando ⌥, o "EFI Boot" do pendrive não aparece.**
-Grave o pendrive de novo (A4), use a outra porta USB e segure ⌥ **antes** do som de inicialização.
+**F1. Segurando ⌥, o "EFI Boot" do pendrive não aparece** (só aparecem "EFI Boot" cinza e "Macintosh HD", que são o disco interno).
+1. Desligue, use a **porta USB do lado esquerdo**, ligue segurando ⌥ e espere uns 15 segundos com o menu aberto.
+2. Entre no macOS e confira a gravação com `diskutil list external`: tem que aparecer um disco externo com uma partição pequena chamada **EFI**. Se não aparecer, grave de novo (A4).
+3. **Cartão SD em leitor USB:** muitos leitores de cartão não aparecem no menu do ⌥, mesmo gravados certo, porque o firmware do Mac não os reconhece. Use um **pendrive USB comum**.
 
 **F2. Sem internet no instalador.**
 iPhone: desconecte, reconecte, toque em **Confiar** e deixe a tela do **Acesso Pessoal** aberta. Android: desligue e ligue a ancoragem/tethering USB. Se não der, escolha "Não quero conectar à internet neste momento" e instale sem internet: o driver do Wi-Fi vem no pendrive.

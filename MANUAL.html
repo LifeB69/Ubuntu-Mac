@@ -271,7 +271,7 @@ html { scroll-behavior: smooth; }
     <div>
       <p style="margin:0 0 8px;font-weight:600">Você vai precisar de</p>
       <ul class="precisa">
-        <li>Pendrive de 8 GB ou mais (ele será apagado)</li>
+        <li>Pendrive USB de 8 GB ou mais (cartão SD em leitor USB costuma não ser reconhecido pelo Mac)</li>
         <li>Carregador do Mac ligado na tomada o tempo todo</li>
         <li>Cabo USB do celular, para a internet durante a instalação</li>
         <li>Senha do Wi-Fi de casa</li>
@@ -521,7 +521,13 @@ html { scroll-behavior: smooth; }
   <header><div class="letra">Parte F</div><h2>Se algo der errado</h2></header>
 
   <details class="prob"><summary><span class="codigo">F1</span>Segurando ⌥, o "EFI Boot" do pendrive não aparece</summary><div class="corpo">
-    <p>Grave o pendrive de novo (A4), use a outra porta USB e segure <kbd>⌥</kbd> antes do som de inicialização.</p>
+    <p>Só aparecem "EFI Boot" cinza e "Macintosh HD"? Esses são o disco interno. Tente nesta ordem:</p>
+    <ol>
+      <li>Desligue, use a <strong>porta USB do lado esquerdo</strong>, ligue segurando <kbd>⌥</kbd> e espere uns 15 segundos com o menu aberto.</li>
+      <li>Entre no macOS e confira a gravação. Tem que aparecer um disco externo com uma partição pequena chamada <strong>EFI</strong>; se não aparecer, grave de novo (A4).</li>
+    </ol>
+    <div class="cmd"><div class="topo"><span class="onde">Terminal do macOS</span><button type="button">Copiar</button></div><pre><code>diskutil list external</code></pre></div>
+    <p><strong>Cartão SD em leitor USB:</strong> muitos leitores de cartão não aparecem no menu do <kbd>⌥</kbd>, mesmo gravados certo, porque o firmware do Mac não os reconhece. Use um pendrive USB comum.</p>
   </div></details>
 
   <details class="prob"><summary><span class="codigo">F2</span>Sem internet no instalador</summary><div class="corpo">
